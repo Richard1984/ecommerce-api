@@ -27,6 +27,13 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# A devise extension which uses JWT tokens for user authentication [https://github.com/waiting-for-dev/devise-jwt]
+gem 'devise-jwt'
+
+gem 'dry-configurable', '0.13.0'
+
+gem 'rack-cors'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 

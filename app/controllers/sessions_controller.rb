@@ -1,6 +1,6 @@
 class SessionsController < Devise::SessionsController
   def create
-    puts "ciao"
+
     user = User.find_by_email(sign_in_params[:email])
 
     if user && user.valid_password?(sign_in_params[:password])
