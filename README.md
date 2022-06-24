@@ -1,24 +1,16 @@
-# README
+# ecommerce-api
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Setup
+Install the dependencies:
+``` bash
+bundle install
+```
 
-Things you may want to cover:
+Add the following to credentials:
+- ```devise_jwt_secret_key: <your_jwt_secret_key>```
+- ```facebook_app_id: <your_facebook_app_id>```
+- ```facebook_secret_key: <your_facebook_secret_key>```
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```bash
+EDITOR="nano" bin/rails credentials:edit # eventually replace nano with your favorite editor
+```

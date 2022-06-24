@@ -1,30 +1,27 @@
 class User < ApplicationRecord
-  include Devise::JWT::RevocationStrategies::Denylist
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :omniauthable, omniauth_providers: [:facebook]
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :jwt_authenticatable, jwt_revocation_strategy: self
+         :recoverable, :rememberable, :validatable
 
-  def generate_jwt
-    JWT.encode({ id: id,
-              exp: 60.days.from_now.to_i },
-             Rails.application.secrets.secret_key_base)
-  end
+  def self.find_or_create_with_facebook_access_token(oauth_access_token)
+    @graph = Koala::Facebook::API.new(oauth_access_token)
+    profile = @graph.get_object('me', fields: ['name', 'email'])
 
-  def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-    end
-  end
+    data = {
+      name: profile['name'],
+      email: profile['email'],
+      uid: profile['id'],
+      provider: 'facebook',
+      oauth_token: oauth_access_token,
+      picture_url: "https://graph.facebook.com/#{profile['id']}/picture?type=large",
+      password: SecureRandom.urlsafe_base64
+    }
 
-  def self.new_with_session(params, session)
-    super.tap do |user|
-      if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
-        user.email = data["email"] if user.email.blank?
-      end
+    if user == User.find_by(uid: data['uid'], provider: 'facebook')
+      user.update_attributes(data)
+    else
+      User.create(data)
     end
   end
 end

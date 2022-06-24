@@ -1,16 +1,11 @@
 Rails.application.routes.draw do
-  # devise_for :users
+  devise_for :users
+  # resources :facebook_authentications_controller
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-  root "users#show"
-  scope :api, defaults: { format: :json } do
-    devise_for :users, controllers: { sessions: :sessions, :omniauth_callbacks => "users/omniauth_callbacks" },
-                       path_names: { 
-                        sign_in: :login,
-                        registration: :signup,
-                     }
+  post '/facebook', to: 'facebook_authentications#create'
 
-    resource :user, only: [:show, :update]
-  end
+  # Defines the root path route ("/")
+  # root "articles#index"
 end
