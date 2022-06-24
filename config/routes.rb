@@ -3,12 +3,12 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-  # root "articles#index"
+  root "users#show"
   scope :api, defaults: { format: :json } do
-    devise_for :users, controllers: { sessions: :sessions },
+    devise_for :users, controllers: { sessions: :sessions, :omniauth_callbacks => "users/omniauth_callbacks" },
                        path_names: { 
                         sign_in: :login,
-                        registration: :signup
+                        registration: :signup,
                      }
 
     resource :user, only: [:show, :update]

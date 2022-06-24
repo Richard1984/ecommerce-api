@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::API
-    # Prevent CSRF attacks by raising an exception.
-    # For APIs, you may want to use :null_session instead.
-    # protect_from_forgery with: :null_session
-    
     include ActionController::HttpAuthentication::Basic::ControllerMethods
     include ActionController::HttpAuthentication::Token::ControllerMethods
     include ActionController::MimeResponds
+
+    # Prevent CSRF attacks by raising an exception.
+    # For APIs, you may want to use :null_session instead.
+    protect_from_forgery with: :null_session
 
     respond_to :json
 
