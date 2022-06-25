@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  # devise_for :users
   # resources :facebook_authentications_controller
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -8,4 +8,18 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+
+    scope defaults: { format: :json } do
+      devise_for :users, 
+      controllers: {
+        sessions: 'users/sessions',
+        registrations: 'users/registrations'
+      },
+      path_names: { 
+        sign_in: :login,
+        registration: :signup
+      }
+
+      resource :user, only: [:show, :update]
+    end
 end
