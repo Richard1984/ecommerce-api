@@ -27,10 +27,9 @@ class User < ApplicationRecord
     if user
       user.update(data)
     else
-      User.create(data)
+      user = User.create(data) # error handling?
     end
 
-    user = User.find_by(uid: data[:uid], provider: 'facebook')
     token = user.generate_jwt
 
     { 'user' => user, 'token' => token }

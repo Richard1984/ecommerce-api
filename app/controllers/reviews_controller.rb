@@ -19,7 +19,7 @@ class ReviewsController < ApplicationController
 		if @review.save
             render json: { message: "Review added." }, status: :ok
 		else
-			render json: { message: "Review added failure."}, status: :not_acceptable # come restituire errore generato da review model?
+			render json: { errors: @review.errors }, status: :not_acceptable
 		end
 	end
 
