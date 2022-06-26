@@ -8,4 +8,6 @@ class Review < ApplicationRecord
     end
 
     validate :stars_between_0_and_5
+    validates :product, uniqueness: { scope: :user,
+        message: "only one review per user" }
 end
