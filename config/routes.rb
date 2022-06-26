@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
+  root "products#index"
+
   post '/facebook', to: 'facebook_authentications#create'
 
   # Defines the root path route ("/")
@@ -22,4 +24,8 @@ Rails.application.routes.draw do
 
       resource :user, only: [:show, :update]
     end
+  
+  resources :products
+  resources :reviews
+  resources :categories
 end

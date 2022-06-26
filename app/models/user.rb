@@ -5,6 +5,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenyList
 
+  has_many :reviews
+  has_many :products, :through => :reviews
+
   def self.find_or_create_with_facebook_access_token(oauth_access_token)
     @graph = Koala::Facebook::API.new(oauth_access_token)
     profile = @graph.get_object('me', fields: ['first_name', 'last_name', 'picture', 'email'])
@@ -20,13 +23,15 @@ class User < ApplicationRecord
     }
 
     user = User.find_by(uid: data[:uid], provider: 'facebook')
-    token = user.generate_jwt
 
     if user
       user.update(data)
     else
       User.create(data)
     end
+
+    user = User.find_by(uid: data[:uid], provider: 'facebook')
+    token = user.generate_jwt
 
     { 'user' => user, 'token' => token }
   end
