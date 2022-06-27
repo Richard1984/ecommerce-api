@@ -1,6 +1,7 @@
 class Product < ApplicationRecord
     belongs_to :category, optional: true
     has_many :reviews, dependent: :destroy
+    has_many :orders
 
     # before_save :capitalize_name
 

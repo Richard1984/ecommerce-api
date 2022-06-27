@@ -6,6 +6,7 @@ class User < ApplicationRecord
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenyList
 
   has_many :reviews
+  has_many :orders
   has_many :products, :through => :reviews
 
   def self.find_or_create_with_facebook_access_token(oauth_access_token)
