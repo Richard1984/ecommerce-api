@@ -6,9 +6,9 @@ class FacebookAuthenticationsController < ApplicationController
     user = User.find_or_create_with_facebook_access_token(facebook_access_token)
     
     if user
-      render json: user.to_json, status: :ok
+      render json: { data: user.to_json }, status: :ok
     else
-      render json: user.errors, status: :unprocessable_entity
+      render json: { data: user.errors }, status: :unprocessable_entity
     end
   end
 end

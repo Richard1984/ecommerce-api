@@ -5,11 +5,11 @@ class ReviewsController < ApplicationController
 
 	def index
 		@reviews = Review.where(product_id: params[:product_id])
-		render json: @reviews
+		render json: { data: @reviews }
 	end
 
 	def show
-		render json: @review
+		render json: { data: @review }
 	end
 	
 	def new
@@ -33,9 +33,9 @@ class ReviewsController < ApplicationController
 		@review = Review.new(review_params)
 		@review.product = @product
 		if @review.save
-            render json: { message: "Review added." }, status: :ok
+            render json: { message: "Review added.", data: @review }, status: :ok
 		else
-			render json: { errors: @review.errors }, status: :not_acceptable
+			render json: { message: "Could not add review", data: @review.errors }, status: :not_acceptable
 		end
 	end
 
@@ -43,9 +43,9 @@ class ReviewsController < ApplicationController
 		#authorize! :update, @movie, :message => "BEWARE: you are not authorized to update existing movies."
 
 		if @review.update(review_params)
-			render json: { message: "Review was successfully updated." }, status: :ok
+			render json: { message: "Review was successfully updated.", data: @review }, status: :ok
 		else
-			render json: { errors: @review.errors }, status: :not_acceptable
+			render json: { message: "Could not update review", data: @review.errors }, status: :not_acceptable
 		end
 	end
 

@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
     
     def index
-        render json: Category.all
+        render json: { data: Category.all }
     end
 
     def new
@@ -13,9 +13,9 @@ class CategoriesController < ApplicationController
 
 		@category = Category.new(params.require(:category).permit(:name))
 		if @category.save
-            render json: { message: "Category added." }, status: :ok
+            render json: { message: "Category added.", data: @category }, status: :ok
 		else
-			render json: { errors: @category.errors }, status: :not_acceptable
+			render json: { message: "Could not add category", data: @category.errors }, status: :not_acceptable
 		end
 	end
 
