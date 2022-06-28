@@ -7,6 +7,9 @@ class CategoriesController < ApplicationController
     def new
 		@category = Category.new
 	end
+
+	def edit
+	end
 	
 	def create
 		#authorize! :create, @review, :message => "BEWARE: you are not authorized to create new reviews."
@@ -16,6 +19,17 @@ class CategoriesController < ApplicationController
             render json: { message: "Category added.", data: @category }, status: :ok
 		else
 			render json: { message: "Could not add category", data: @category.errors }, status: :not_acceptable
+		end
+	end
+
+	# NON E' tra le user stories
+	def update
+		#authorize! :update, @movie, :message => "BEWARE: you are not authorized to update existing movies."
+
+		if @category.update(params.require(:category).permit(:name))
+			render json: { message: "Category was successfully updated.", data: @category }, status: :ok
+		else
+			render json: { message: "Could not update category", data: @category.errors }, status: :not_acceptable
 		end
 	end
 
