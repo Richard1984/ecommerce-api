@@ -2,15 +2,6 @@ class Product < ApplicationRecord
     belongs_to :category, optional: true
     has_many :reviews, dependent: :destroy
 
-    # before_save :capitalize_name
-
-    # def capitalize_name
-    #     self.name = self.name.split(/\s+/).map(&:downcase).
-    #       map(&:capitalize).join(' ')
-    # end
-
-    # model validation
-
     def non_negative_price_availability
         errors.add(:price, 'must be non negative') if
                 price < 0
