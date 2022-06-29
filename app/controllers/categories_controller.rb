@@ -26,6 +26,7 @@ class CategoriesController < ApplicationController
 	def update
 		#authorize! :update, @movie, :message => "BEWARE: you are not authorized to update existing movies."
 
+		@category = Category.find(params[:id])
 		if @category.update(params.require(:category).permit(:name))
 			render json: { message: "Category was successfully updated.", data: @category }, status: :ok
 		else

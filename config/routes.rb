@@ -32,7 +32,5 @@ Rails.application.routes.draw do
     resources :products, only: [:index]
   end
 
-  resources :account do
-    resources :account, only: [:index]
-  end
+  resource :account, only: [:show, :edit, :update]
 end
