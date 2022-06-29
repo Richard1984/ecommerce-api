@@ -31,3 +31,11 @@
 
 it:
   hello: "Ciao mondo"
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "foo blank in nl bar baz"
+              taken: "indirizzo email gia' registrato"

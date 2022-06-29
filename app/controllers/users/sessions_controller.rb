@@ -4,11 +4,12 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def respond_with(resource, _opts = {})
-    render json: { data: JSON.parse(@user.to_json), message: 'Logged in.' }, status: :ok
+    # Da ricontrollare, il login sembra andare a buon fine, ma le altre funzioni sembrano non ricordarsi dell'utente (mentre dopo il signup se ne ricordano)
+    render json: { data: @user, message: 'Logged in.' }, status: :ok
   end
 
   def respond_to_on_destroy
-    current_user ? log_out_success : log_out_failure
+    current_user ? log_out_failure : log_out_success
   end
 
   def log_out_success
@@ -16,6 +17,6 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def log_out_failure
-    render json: { message: "Logged out failure."}, status: :unauthorized
+    render json: { message: "Logged out failure.", data: current_user }, status: :unauthorized
   end
 end
