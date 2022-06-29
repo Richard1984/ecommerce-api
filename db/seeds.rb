@@ -18,4 +18,4 @@ Product.create!(name: "un cane", category_id: 2, availability: 10, price: 24.07,
 Product.create!(name: "prodotto bello", category_id: 2, availability: 140, price: 66, description: "E' bello")
 Product.create!(name: "tastiera meccanica", category_id: 1, availability: 0, price: 10000, description: "Costa troppo ma qualcuno la compra di sicuro")
 Product.create!(name: "ennesimo prodotto", category_id: 1, availability: 10, price: 25.08, description: "Uffa")
-User.create!(email: "asd@asd.it", password: "not_a_password")
+User.create!(firstname: "Jeff", lastname: "Mbezos", email: "asd@asd.it", password: "not_a_password")
