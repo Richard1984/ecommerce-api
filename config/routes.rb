@@ -31,4 +31,8 @@ Rails.application.routes.draw do
   resources :categories do
     resources :products, only: [:index]
   end
+
+  resources :account do
+    resources :account, only: [:index]
+  end
 end
