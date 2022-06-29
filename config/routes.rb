@@ -21,12 +21,12 @@ Rails.application.routes.draw do
         sign_in: :login,
         registration: :signup
       }
-
-      resource :user, only: [:show, :update]
     end
   
   resources :products do
-    resources :reviews, only: [:new, :show, :create, :index, :edit, :update]
+    resources :reviews, only: [:new, :show, :create, :index, :edit, :update] do
+      resource :vote, except: :index
+    end
   end
   resources :categories do
     resources :products, only: [:index]

@@ -13,9 +13,6 @@ class ReviewsController < ApplicationController
 	end
 	
 	def new
-		id_product = params[:product_id]
-		@product = Product.find(id_product)
-		# @users = User.all
 		@review = Review.new
 	end
 
