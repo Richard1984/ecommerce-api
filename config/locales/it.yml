@@ -37,5 +37,5 @@ it:
         user:
           attributes:
             email:
-              blank: "foo blank in nl bar baz"
+              blank: "indirizzo email non puo' essere vuoto"
               taken: "indirizzo email gia' registrato"
