@@ -5,7 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenyList
 
-  has_many :reviews
+  has_many :reviews, dependent: :destroy
+  has_many :votes, dependent: :destroy
   has_many :products, :through => :reviews
   has_one_attached :avatar
 

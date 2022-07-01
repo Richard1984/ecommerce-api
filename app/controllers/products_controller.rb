@@ -96,7 +96,7 @@ class ProductsController < ApplicationController
 
         @products = Product.all
         @products = @products.where(category_id: category_id) if category_id # Filter by category
-        @products = @products.where("name like ?", "#{search_name}%") if search_name # Select starting by name
+        @products = @products.where("name like ?", "%#{search_name}%") if search_name # Select containing name
         @products = @products.order(sorting_criteria => sorting_order) if sorting_criteria # Sort
         return @products
     end

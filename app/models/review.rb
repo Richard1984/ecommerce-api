@@ -1,6 +1,7 @@
 class Review < ApplicationRecord
     belongs_to :product
 	belongs_to :user
+    has_many :votes, dependent: :destroy
 
     def stars_between_0_and_5
         errors.add(:stars, 'must be between 0 and 5') if

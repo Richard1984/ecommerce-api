@@ -23,7 +23,7 @@ class ReviewsController < ApplicationController
 		#authorize! :create, @review, :message => "BEWARE: you are not authorized to create new reviews."
 
 		@review = Review.new(review_params)
-		@review.product = @product
+		@review.product_id = params[:product_id]
 		if @review.save
             render json: { message: "Review added.", data: @review }, status: :ok
 		else

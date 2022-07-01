@@ -19,6 +19,18 @@ class AccountsController < ApplicationController
 		end
 	end
 
+	def destroy
+		# Eliminare l'utente elmina anche tutte le reviews e i voti alle reviews associati ad esso
+		user = current_user
+		sign_out user
+		user.avatar.purge
+		if user.destroy
+			render json: { message: "User deleted.", data: user }, status: :ok
+		else
+			render json: { message: "Could not delete user", data: user.errors }, status: :internal_server_error
+		end
+	end
+
 	def get_avatar
 		if user_avatar
 			render json: { data: user_avatar }, status: :ok
