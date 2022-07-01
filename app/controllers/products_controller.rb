@@ -9,7 +9,9 @@ class ProductsController < ApplicationController
 		images = []
 		if @product.images.attached?
 			@product.images.each do |image|
-				images.push(url_for(image))
+				image_json = JSON.parse(image.to_json)
+				image_json[:url] = url_for(image)
+				images.push(image_json)
 			end
 		end
         render json: { data: { product: @product, images: images } }
