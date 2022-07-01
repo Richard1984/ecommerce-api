@@ -18,4 +18,27 @@ class AccountsController < ApplicationController
 			render json: { message: "Could not update user information", data: current_user.errors }, status: :not_acceptable
 		end
 	end
+
+	def get_avatar
+		if current_user.avatar.attached?
+			render json: { data: url_for(current_user.avatar) }, status: :ok
+		else
+			render json: { message: "User does not have an avatar" }, status: :not_found
+		end
+	end
+
+	def update_avatar
+		# Mettere qualche check per la dimensione
+		current_user.avatar.attach(params[:avatar])
+		render json: { message: "Avatar updated" }
+	end
+
+	def destroy_avatar
+		current_user.avatar.purge
+		if !current_user.avatar.attached?
+			render json: { message: "Avatar deleted" }
+		else
+			render json: { message: "Avatar not found" }
+		end
+	end
 end

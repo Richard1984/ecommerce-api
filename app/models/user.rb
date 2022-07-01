@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   has_many :reviews
   has_many :products, :through => :reviews
+  has_one_attached :avatar
 
   def self.find_or_create_with_facebook_access_token(oauth_access_token)
     @graph = Koala::Facebook::API.new(oauth_access_token)
@@ -19,7 +20,8 @@ class User < ApplicationRecord
       uid: profile['id'],
       provider: 'facebook',
       # oauth_token: oauth_access_token,
-      # image: "https://graph.facebook.com/#{profile['id']}/picture?type=large",
+      # avatar: "https://graph.facebook.com/#{profile['id']}/picture?type=large",
+      avatar: profile['picture'],
       password: SecureRandom.urlsafe_base64
     }
 

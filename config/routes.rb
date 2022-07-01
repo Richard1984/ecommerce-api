@@ -32,5 +32,9 @@ Rails.application.routes.draw do
     resources :products, only: [:index]
   end
 
-  resource :account, only: [:show, :edit, :update]
+  resource :account, only: [:show, :edit, :update] do
+    get "avatar", to: "accounts#get_avatar"
+    post "avatar", to: "accounts#update_avatar"
+    delete "avatar", to: "accounts#destroy_avatar"
+  end
 end
