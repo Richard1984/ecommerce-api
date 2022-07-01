@@ -65,10 +65,26 @@ class ProductsController < ApplicationController
 	end
 
 	def destroy_images
-		# Elimina tutte le immagini
+		
+		images_to_destroy = params[:images_ids]
+		images_destroyed = []
 		product = Product.find(params[:product_id])
-		product.images.purge
-		render json: { message: "Images deleted" }
+		if images_to_destroy
+			images_to_destroy.each do |i|
+				image = product.images.find(i)
+				if image
+					image.purge
+					images_destroyed.push(image)
+				end
+			end
+		else
+			product.images.each do |image|
+				images_destroyed.push(image)
+			end
+			product.images.purge
+		end
+
+		render json: { message: "Images deleted", data: images_destroyed }
 	end
     
 	private
