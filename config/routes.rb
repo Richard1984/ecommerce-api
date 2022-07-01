@@ -27,6 +27,8 @@ Rails.application.routes.draw do
     resources :reviews, only: [:new, :show, :create, :index, :edit, :update] do
       resource :vote, except: :index
     end
+    post "images", to: "products#update_images"
+    delete "images", to: "products#destroy_images"
   end
   resources :categories do
     resources :products, only: [:index]

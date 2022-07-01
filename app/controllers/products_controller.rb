@@ -1,15 +1,22 @@
 class ProductsController < ApplicationController
-    before_action :set_product, only: %i[ show edit update destroy]
+	before_action :set_product, only: %i[ show edit update destroy]
 
     def index
         render json: { data: search_and_order }
     end
 
     def show
-        render json: { data: @product }
+		images = []
+		if @product.images.attached?
+			@product.images.each do |image|
+				images.push(url_for(image))
+			end
+		end
+        render json: { data: { product: @product, images: images } }
 	end
 	
 	def new
+		# inutile
 		@product = Product.new
 	end
 
@@ -19,6 +26,7 @@ class ProductsController < ApplicationController
 	def create
 		#authorize! :create, @review, :message => "BEWARE: you are not authorized to create new reviews."
 
+		# Per creare un prodotto con immagini devi prima fare un post sul prodotto e poi fare un post sulle immagini del prodotto
 		@product = Product.new(product_params)
 		if @product.save
             render json: { message: "Product added.", data: @product }, status: :ok
@@ -40,12 +48,26 @@ class ProductsController < ApplicationController
 	def destroy
 		#authorize! :destroy, @review, :message => "BEWARE: you are not authorized to destroy existing reviews."
 		
+		@product.images.purge
 		@product.destroy
 	
 		render json: { message: "Product deleted." }, status: :ok
 	end
 
-    
+    def update_images
+		# errori?
+		# Carica immagini, per sostituire dovresti salvarti le immagini da tenere, fare destroy_images e poi ricaricare le immagini che ti sei salvato + quelle nuove che vuoi aggiungere
+		product = Product.find(params[:product_id])
+		product.images.attach(params[:images])
+		render json: { message: "Images uploaded", images: product.images.attached? }
+	end
+
+	def destroy_images
+		# Elimina tutte le immagini
+		product = Product.find(params[:product_id])
+		product.images.purge
+		render json: { message: "Images deleted" }
+	end
     
 	private
 

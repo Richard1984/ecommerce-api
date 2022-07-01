@@ -3,7 +3,7 @@ class AccountsController < ApplicationController
     before_action :authenticate_user!
 
 	def show
-		render json: { data: current_user }
+		render json: { data: { user: current_user, avatar: user_avatar} }
 	end
 
 	def edit
@@ -20,25 +20,27 @@ class AccountsController < ApplicationController
 	end
 
 	def get_avatar
-		if current_user.avatar.attached?
-			render json: { data: url_for(current_user.avatar) }, status: :ok
+		if user_avatar
+			render json: { data: user_avatar }, status: :ok
 		else
 			render json: { message: "User does not have an avatar" }, status: :not_found
 		end
 	end
 
 	def update_avatar
-		# Mettere qualche check per la dimensione
+		# Mettere qualche check per la dimensione, errori?
 		current_user.avatar.attach(params[:avatar])
 		render json: { message: "Avatar updated" }
 	end
 
 	def destroy_avatar
 		current_user.avatar.purge
-		if !current_user.avatar.attached?
-			render json: { message: "Avatar deleted" }
-		else
-			render json: { message: "Avatar not found" }
-		end
+		render json: { message: "Avatar deleted" }
+	end
+
+	private
+	
+	def user_avatar
+		return current_user.avatar.attached? ? url_for(current_user.avatar) : nil
 	end
 end
