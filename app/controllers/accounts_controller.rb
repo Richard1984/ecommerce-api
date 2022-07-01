@@ -3,7 +3,9 @@ class AccountsController < ApplicationController
     before_action :authenticate_user!
 
 	def show
-		render json: { data: { user: current_user, avatar: user_avatar} }
+		current_user_json = JSON.parse(current_user.to_json)
+		current_user_json[:avatar] = user_avatar
+		render json: { data: current_user_json }
 	end
 
 	def edit
