@@ -1,18 +1,21 @@
 class OrdersController < ApplicationController
-	before_action :set_review, only: %i[ show edit update ]
+	before_action :set_order, only: %i[ show edit update ]
 
     def index
         id_user = params[:user_id]
-        user_order = Order.where(user_id: id_user).group_by {|o| o}
+        orders = Order.where(user_id: id_user)
+		user_order = orders.map do |u|
+			{ :id => u.id, :products => u.products }
+		  end
         render json: { data: user_order} 
     end
 
 	def show
         x=  @order[:user_id]
         y = params[:user_id]
-     
+
         if x.to_s == y.to_s
-            render json: { message: "ok.", data: @order }, status: :ok
+            	render json: { message: "ok.", data: @order.products }, status: :ok
         else
             render json: { message: "This user is not allowed to see this order." }, status: :not_acceptable
         end
@@ -25,14 +28,17 @@ class OrdersController < ApplicationController
 	end
 	
 	def create
-		id_product = params[:product_id]
-		@product = Product.find(id_product)
-		id_user = params[:order][:user_id]
-		@user = User.find(id_user)
-
-		@order = Order.new(order_params)
-		@order.product = @product
+		prod = params[:products]
+		@order = Order.new(user_id:params[:user_id])
 		if @order.save
+			prod.each{|p|
+				op = OrderProduct.new(order_id:@order[:id],product_id:p[:id],quantity:p[:quantity])
+				if op.save
+					puts "prodotto aggiunto all ordine" 
+				else 
+					puts "non aggiunto" #si puo fare il rollback
+				end
+			}
             render json: { message: "Order added.", data: @order }, status: :ok
 		else
 			render json: { message: "Could not add order", data: @order.errors }, status: :not_acceptable
@@ -44,11 +50,11 @@ class OrdersController < ApplicationController
 
 	private
 	# Use callbacks to share common setup or constraints between actions.
-	def set_review
+	def set_order
 		@order = Order.find(params[:id])
 	end
 
 	def order_params
-		params.require(:order).permit(:product_id,:user_id,:id)
+		params.require(:order).permit(:user_id)
 	end
 end
