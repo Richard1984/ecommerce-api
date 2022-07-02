@@ -28,5 +28,8 @@ Rails.application.routes.draw do
   resources :products do
     resources :reviews, only: [:new, :show, :create, :index, :edit, :update]
   end
+  resources :users do
+    resources :orders, only: [:new, :show, :create, :index]
+  end
   resources :categories
 end
