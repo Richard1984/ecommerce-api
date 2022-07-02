@@ -7,6 +7,9 @@ class CategoriesController < ApplicationController
     def new
 		@category = Category.new
 	end
+
+	def edit
+	end
 	
 	def create
 		#authorize! :create, @review, :message => "BEWARE: you are not authorized to create new reviews."
@@ -20,10 +23,24 @@ class CategoriesController < ApplicationController
 	end
 
 	# NON E' tra le user stories
+	def update
+		#authorize! :update, @movie, :message => "BEWARE: you are not authorized to update existing movies."
+
+		@category = Category.find(params[:id])
+		if @category.update(params.require(:category).permit(:name))
+			render json: { message: "Category was successfully updated.", data: @category }, status: :ok
+		else
+			render json: { message: "Could not update category", data: @category.errors }, status: :not_acceptable
+		end
+	end
+
+	# NON E' tra le user stories
 	def destroy
 		#authorize! :destroy, @review, :message => "BEWARE: you are not authorized to destroy existing reviews."
 
         @category = Category.find(params[:id])
+		# Imposta category_id=null ai prodotti che appartengono a questa categoria 
+		Product.where(category_id: params[:id]).update_all(category_id: nil)
 		@category.destroy
 	
 		render json: { message: "Category deleted." }, status: :ok

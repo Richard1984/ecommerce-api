@@ -13,9 +13,6 @@ class ReviewsController < ApplicationController
 	end
 	
 	def new
-		id_product = params[:product_id]
-		@product = Product.find(id_product)
-		# @users = User.all
 		@review = Review.new
 	end
 
@@ -25,13 +22,8 @@ class ReviewsController < ApplicationController
 	def create
 		#authorize! :create, @review, :message => "BEWARE: you are not authorized to create new reviews."
 
-		id_product = params[:product_id]
-		@product = Product.find(id_product)
-		id_user = params[:review][:user_id]
-		@user = User.find(id_user)
-		# @users = User.all
 		@review = Review.new(review_params)
-		@review.product = @product
+		@review.product_id = params[:product_id]
 		if @review.save
             render json: { message: "Review added.", data: @review }, status: :ok
 		else
@@ -48,15 +40,6 @@ class ReviewsController < ApplicationController
 			render json: { message: "Could not update review", data: @review.errors }, status: :not_acceptable
 		end
 	end
-
-	# NON E' tra le user stories
-	# def destroy
-	# 	#authorize! :destroy, @review, :message => "BEWARE: you are not authorized to destroy existing reviews."
-		
-	# 	@review.destroy
-	
-	# 	render json: { message: "Review deleted." }, status: :ok
-	# end
 
 	private
 	# Use callbacks to share common setup or constraints between actions.

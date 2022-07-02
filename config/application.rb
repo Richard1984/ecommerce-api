@@ -15,6 +15,9 @@ module EcommerceApi
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
 
+    config.i18n.available_locales = ["en", "it"]
+    config.i18n.default_locale = :'it'
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

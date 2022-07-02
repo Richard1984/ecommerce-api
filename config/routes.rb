@@ -21,12 +21,23 @@ Rails.application.routes.draw do
         sign_in: :login,
         registration: :signup
       }
-
-      resource :user, only: [:show, :update]
     end
   
   resources :products do
-    resources :reviews, only: [:new, :show, :create, :index, :edit, :update]
+    resources :reviews, only: [:new, :show, :create, :index, :edit, :update] do
+      resource :vote, except: :index
+    end
+    post "images", to: "products#update_images"
+    delete "images", to: "products#destroy_images"
+  end
+  resources :categories do
+    resources :products, only: [:index]
+  end
+
+  resource :account, only: [:show, :edit, :update, :destroy] do
+    get "avatar", to: "accounts#get_avatar"
+    post "avatar", to: "accounts#update_avatar"
+    delete "avatar", to: "accounts#destroy_avatar"
   end
   resources :users do
     resources :orders, only: [:new, :show, :create, :index]
