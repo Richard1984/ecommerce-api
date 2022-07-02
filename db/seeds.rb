@@ -7,4 +7,6 @@
 #   Character.create(name: "Luke", movie: movies.first)
 Category.create!(name: "categoria1")
 Product.create!(name: "prodotto1", category_id: 1, availability: 10, price: 24.08, description: "Un prodotto importante")
+Product.create!(name: "prodotto2", category_id: 1, availability: 10, price: 24.08, description: "Un prodotto importante")
 User.create!(email: "asd@asd.it", password: "not_a_password")
+User.create!(email: "asdaaa@asd.it", password: "noat_a_password")
