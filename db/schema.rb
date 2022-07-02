@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_30_230738) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_02_083619) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -52,12 +52,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_230738) do
     t.index ["jti"], name: "index_jwt_deny_list_on_jti"
   end
 
+  create_table "order_products", force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.integer "product_id", null: false
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_products_on_order_id"
+    t.index ["product_id"], name: "index_order_products_on_product_id"
+  end
+
   create_table "orders", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
-    t.integer "product_id", null: false
-    t.index ["product_id"], name: "index_orders_on_product_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -92,9 +100,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_230738) do
     t.datetime "updated_at", null: false
     t.string "provider"
     t.string "uid"
-    t.string "name"
-    t.string "surname"
-    t.string "country"
     t.string "firstname"
     t.string "lastname"
     t.string "contry"
@@ -102,10 +107,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_230738) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-<<<<<<< HEAD
-  add_foreign_key "orders", "products"
-  add_foreign_key "orders", "users"
-=======
   create_table "votes", force: :cascade do |t|
     t.boolean "likes"
     t.datetime "created_at", null: false
@@ -118,7 +119,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_230738) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
->>>>>>> 387cf65bb55e239d7e0549a198dfcc0a8f01a4fa
+  add_foreign_key "order_products", "orders"
+  add_foreign_key "order_products", "products"
+  add_foreign_key "orders", "users"
   add_foreign_key "products", "categories"
   add_foreign_key "reviews", "products"
   add_foreign_key "reviews", "users"

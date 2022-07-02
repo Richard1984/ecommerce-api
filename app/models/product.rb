@@ -2,6 +2,8 @@ class Product < ApplicationRecord
     belongs_to :category, optional: true
     has_many :reviews, dependent: :destroy
 	has_many_attached :images
+    has_many :order_products
+    has_many :orders, through: :order_products
 
     def non_negative_price_availability
         errors.add(:price, 'must be non negative') if
