@@ -1,60 +1,50 @@
 class OrdersController < ApplicationController
-	before_action :set_order, only: %i[ show edit update ]
 
     def index
-        id_user = params[:user_id]
-        orders = Order.where(user_id: id_user)
+		# Questo e' index per user corrente, index per negoziante da fare dopo con roles
+		# if negoziante then orders = Order.all
+        orders = Order.where(user_id: current_user.id)
 		user_order = orders.map do |u|
 			{ :id => u.id, :products => u.products }
 		  end
+		# Forse e' meglio passare tutto l'ordine e gli order_products
         render json: { data: user_order} 
     end
 
 	def show
-        x=  @order[:user_id]
-        y = params[:user_id]
-
-        if x.to_s == y.to_s
-            	render json: { message: "ok.", data: @order.products }, status: :ok
+		# Questo e' show per user corrente, show per negoziante da fare dopo con roles
+		# if negoziante then order = Order.find(params[:id])
+		order = Order.find_by(id: params[:id], user_id: current_user.id)
+        if order
+			# Forse e' meglio passare tutto l'ordine e gli order_products
+            render json: { data: order.products }, status: :ok
         else
-            render json: { message: "This user is not allowed to see this order." }, status: :not_acceptable
+            render json: { message: "Order #{params[:id]} for user #{current_user.email} not found." }, status: :not_found
         end
 	end
 	
 	def new
-		id_user = params[:user_id]
-		@product = User.find(id_user)
-		@review = Order.new
 	end
 	
 	def create
-		prod = params[:products]
-		@order = Order.new(user_id:params[:user_id])
-		if @order.save
-			prod.each{|p|
-				op = OrderProduct.new(order_id:@order[:id],product_id:p[:id],quantity:p[:quantity])
-				if op.save
-					puts "prodotto aggiunto all ordine" 
-				else 
-					puts "non aggiunto" #si puo fare il rollback
+		# DIMINUIRE AVAILABILITY DEI PRODOTTI ORDINATI? FARE CHECK DISPONIBILITA E IN CASO FARE ROLLBACK
+		products = params[:products]
+		order = Order.new(user_id: current_user.id)
+		begin
+			Order.transaction do
+				order.save!
+				OrderProduct.transaction do
+					products.each do |p|
+						op = OrderProduct.new(order_id:order[:id],product_id:p[:id],quantity:p[:quantity])
+						op.save!
+					end
 				end
-			}
-            render json: { message: "Order added.", data: @order }, status: :ok
+			end
+		rescue Exception => e
+            render json: { message: "Could not generate order", data: e }, status: 500
 		else
-			render json: { message: "Could not add order", data: @order.errors }, status: :not_acceptable
+			# Forse e' meglio passare tutto l'ordine e gli order_products
+			render json: { message: "Order added.", data: order }, status: :ok
 		end
-	end
-
-
-
-
-	private
-	# Use callbacks to share common setup or constraints between actions.
-	def set_order
-		@order = Order.find(params[:id])
-	end
-
-	def order_params
-		params.require(:order).permit(:user_id)
 	end
 end

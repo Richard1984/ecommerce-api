@@ -38,9 +38,6 @@ Rails.application.routes.draw do
     get "avatar", to: "accounts#get_avatar"
     post "avatar", to: "accounts#update_avatar"
     delete "avatar", to: "accounts#destroy_avatar"
-  end
-  resources :users do
     resources :orders, only: [:new, :show, :create, :index]
   end
-  resources :categories
 end

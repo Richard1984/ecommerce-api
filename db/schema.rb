@@ -100,6 +100,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_02_083619) do
     t.datetime "updated_at", null: false
     t.string "provider"
     t.string "uid"
+    t.string "name"
+    t.string "surname"
+    t.string "country"
     t.string "firstname"
     t.string "lastname"
     t.string "contry"

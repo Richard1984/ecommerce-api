@@ -49,6 +49,8 @@ class ProductsController < ApplicationController
 
 	def destroy
 		#authorize! :destroy, @review, :message => "BEWARE: you are not authorized to destroy existing reviews."
+
+		# FORSE MOLTO MEGLIO FARE UN CAMPO DISPONIBILE, RENDERLO NEGATIVO E NASCONDERLO AGLI INDEX
 		
 		@product.images.purge
 		@product.destroy
