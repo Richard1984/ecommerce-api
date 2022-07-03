@@ -1,12 +1,14 @@
 class OrdersController < ApplicationController
-
     def index
 		# Questo e' index per user corrente, index per negoziante da fare dopo con roles
 		# if negoziante then orders = Order.all
         orders = Order.where(user_id: current_user.id)
-		user_order = orders.map do |u|
-			{ :id => u.id, :products => u.products }
-		  end
+		user_order = orders.map { |o|
+			{ 
+				:id => o.id, 
+				:products => full_order(o)
+			}
+		}	
 		# Forse e' meglio passare tutto l'ordine e gli order_products
         render json: { data: user_order} 
     end
@@ -16,8 +18,8 @@ class OrdersController < ApplicationController
 		# if negoziante then order = Order.find(params[:id])
 		order = Order.find_by(id: params[:id], user_id: current_user.id)
         if order
-			# Forse e' meglio passare tutto l'ordine e gli order_products
-            render json: { data: order.products }, status: :ok
+			full_order_info = full_order(order)
+            render json: { data: full_order_info}, status: :ok
         else
             render json: { message: "Order #{params[:id]} for user #{current_user.email} not found." }, status: :not_found
         end
@@ -27,7 +29,7 @@ class OrdersController < ApplicationController
 	end
 	
 	def create
-		# DIMINUIRE AVAILABILITY DEI PRODOTTI ORDINATI? FARE CHECK DISPONIBILITA E IN CASO FARE ROLLBACK
+		# FARE CHECK DISPONIBILITA E IN CASO FARE ROLLBACK (sembra funzionare)
 		products = params[:products]
 		order = Order.new(user_id: current_user.id)
 		begin
@@ -35,8 +37,15 @@ class OrdersController < ApplicationController
 				order.save!
 				OrderProduct.transaction do
 					products.each do |p|
-						op = OrderProduct.new(order_id:order[:id],product_id:p[:id],quantity:p[:quantity])
-						op.save!
+						prod = Product.find_by(id:p[:id])
+						av = prod[:availability] - p[:quantity]
+						if av<0
+							raise StandardError.new("Not enough products")
+						else
+							prod.update_columns(availability:av)
+							op = OrderProduct.new(order_id:order[:id],product_id:p[:id],quantity:p[:quantity])
+							op.save!
+						end
 					end
 				end
 			end
@@ -47,4 +56,15 @@ class OrdersController < ApplicationController
 			render json: { message: "Order added.", data: order }, status: :ok
 		end
 	end
+end
+
+private
+
+def full_order(order)
+	order.products.map{ |p|
+		{
+			:info => p,
+			:quantity => OrderProduct.find_by(product_id: p[:id],order_id:order[:id])[:quantity]
+		}
+	}
 end
