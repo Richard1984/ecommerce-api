@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_many :votes, dependent: :destroy
   has_many :products, :through => :reviews
+  has_many :orders
+  has_many :lists
   has_one_attached :avatar
 
   def self.find_or_create_with_facebook_access_token(oauth_access_token)

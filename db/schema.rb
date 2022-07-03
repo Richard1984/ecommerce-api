@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_03_001237) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_03_015322) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -50,6 +50,22 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_03_001237) do
     t.string "jti", null: false
     t.datetime "exp", null: false
     t.index ["jti"], name: "index_jwt_deny_list_on_jti"
+  end
+
+  create_table "lists", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_lists_on_user_id"
+  end
+
+  create_table "lists_entries", force: :cascade do |t|
+    t.integer "list_id", null: false
+    t.integer "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["list_id"], name: "index_lists_entries_on_list_id"
+    t.index ["product_id"], name: "index_lists_entries_on_product_id"
   end
 
   create_table "order_products", force: :cascade do |t|
@@ -135,6 +151,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_03_001237) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "lists", "users"
+  add_foreign_key "lists_entries", "lists"
+  add_foreign_key "lists_entries", "products"
   add_foreign_key "order_products", "orders"
   add_foreign_key "order_products", "products"
   add_foreign_key "orders", "users"
