@@ -1,5 +1,4 @@
 class VotesController < ApplicationController
-	# TODO: valutazione recensione
 	# before_action :authenticate_user! #forza autenticazione
     before_action :vote_params
 	before_action :set_vote, only: %i[ show edit update destroy]

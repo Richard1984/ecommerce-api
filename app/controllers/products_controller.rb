@@ -14,7 +14,10 @@ class ProductsController < ApplicationController
 				images.push(image_json)
 			end
 		end
-        render json: { data: { product: @product, images: images } }
+		product_json = JSON.parse(@product.to_json)
+		product_json[:images] = images
+		product_json[:avg_reviews] = @product.avg_reviews
+        render json: { data: product_json }
 	end
 	
 	def new
