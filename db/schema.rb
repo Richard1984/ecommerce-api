@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_02_083619) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_03_001237) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -88,6 +88,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_02_083619) do
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_reviews_on_product_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
+  create_table "shops", force: :cascade do |t|
+    t.integer "singleton_guard"
+    t.string "name", default: ""
+    t.string "surname", default: ""
+    t.string "social_reason", default: ""
+    t.string "vat_number", default: ""
+    t.string "address", default: ""
+    t.string "sector", default: ""
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["singleton_guard"], name: "index_shops_on_singleton_guard", unique: true
   end
 
   create_table "users", force: :cascade do |t|

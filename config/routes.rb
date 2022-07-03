@@ -40,4 +40,6 @@ Rails.application.routes.draw do
     delete "avatar", to: "accounts#destroy_avatar"
     resources :orders, only: [:new, :show, :create, :index]
   end
+
+  resource :shop, only: [:show, :update]
 end
