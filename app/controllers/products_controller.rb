@@ -53,17 +53,20 @@ class ProductsController < ApplicationController
 	def destroy
 		#authorize! :destroy, @review, :message => "BEWARE: you are not authorized to destroy existing reviews."
 
-		# FORSE MOLTO MEGLIO FARE UN CAMPO DISPONIBILE, RENDERLO NEGATIVO E NASCONDERLO AGLI INDEX
-		
-		@product.images.purge
-		@product.destroy
+		#@product.images.purge
+		#@product.destroy
+
+		# E' probabilmente meglio rendere il prodotto non disponibile invece di cancellarlo
+		# In questo modo si possono preservare tutti i vari ordini e le liste
+		# Forse cambiare la colonna availability in stock per evitare confusioni
+		# Cambiare file user stories?
+		@product.update(availability: 0, available: false)
 	
-		render json: { message: "Product deleted." }, status: :ok
+		render json: { message: "Product is now unavailable.", data: @product }, status: :ok
 	end
 
     def update_images
 		# errori?
-		# Carica immagini, per sostituire dovresti salvarti le immagini da tenere, fare destroy_images e poi ricaricare le immagini che ti sei salvato + quelle nuove che vuoi aggiungere
 		product = Product.find(params[:product_id])
 		product.images.attach(params[:images])
 		render json: { message: "Images uploaded", images: product.images.attached? }
@@ -99,7 +102,7 @@ class ProductsController < ApplicationController
 	end
 
 	def product_params
-        params.require(:product).permit(:name, :availability, :price, :description, :category_id)
+        params.require(:product).permit(:name, :availability, :price, :description, :category_id, :available)
 	end
 
     def search_and_order
@@ -115,7 +118,7 @@ class ProductsController < ApplicationController
             sorting_order = nil
         end
 
-        @products = Product.all
+        @products = Product.where(available: true) # index mostra solo i prodotti disponibili
         @products = @products.where(category_id: category_id) if category_id # Filter by category
         @products = @products.where("name like ?", "%#{search_name}%") if search_name # Select containing name
         @products = @products.order(sorting_criteria => sorting_order) if sorting_criteria # Sort
