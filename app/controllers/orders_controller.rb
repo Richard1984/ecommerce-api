@@ -29,7 +29,7 @@ class OrdersController < ApplicationController
 	end
 	
 	def create
-		# DIMINUIRE AVAILABILITY DEI PRODOTTI ORDINATI? FARE CHECK DISPONIBILITA E IN CASO FARE ROLLBACK
+		# FARE CHECK DISPONIBILITA E IN CASO FARE ROLLBACK (sembra funzionare)
 		products = params[:products]
 		order = Order.new(user_id: current_user.id)
 		begin
@@ -37,8 +37,15 @@ class OrdersController < ApplicationController
 				order.save!
 				OrderProduct.transaction do
 					products.each do |p|
-						op = OrderProduct.new(order_id:order[:id],product_id:p[:id],quantity:p[:quantity])
-						op.save!
+						prod = Product.find_by(id:p[:id])
+						av = prod[:availability] - p[:quantity]
+						if av<0
+							raise StandardError.new("Not enough products")
+						else
+							prod.update_columns(availability:av)
+							op = OrderProduct.new(order_id:order[:id],product_id:p[:id],quantity:p[:quantity])
+							op.save!
+						end
 					end
 				end
 			end
