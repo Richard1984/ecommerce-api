@@ -4,6 +4,7 @@
 Install the dependencies:
 ``` bash
 bundle install
+rake db:migrate
 ```
 
 Add the following to credentials:
