@@ -11,8 +11,14 @@ class Product < ApplicationRecord
         errors.add(:availability, 'must be non negative') if
                 availability < 0
     end
+	
+	def not_available
+		errors.add(:available, 'number of available items must be 0 for it to be unavailable') if
+				!available && availability > 0
+	end
 
 	validate :non_negative_price_availability
+	validate :not_available
 
     def avg_reviews
 		sum = 0

@@ -68,6 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_092141) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
     t.index ["user_id"], name: "index_lists_on_user_id"
   end
 
@@ -103,6 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_092141) do
     t.decimal "price", precision: 6, scale: 2, default: "0.0", null: false
     t.text "description", default: ""
     t.integer "category_id"
+    t.boolean "available", default: true
     t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["name"], name: "index_products_on_name", unique: true
   end
@@ -141,6 +143,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_092141) do
     t.datetime "updated_at", null: false
     t.string "provider"
     t.string "uid"
+    t.string "name"
+    t.string "surname"
+    t.string "country"
     t.string "firstname"
     t.string "lastname"
     t.string "contry"
