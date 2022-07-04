@@ -25,8 +25,6 @@ class OrdersController < ApplicationController
         end
 	end
 	
-	def new
-	end
 	
 	def create
 		# FARE CHECK DISPONIBILITA E IN CASO FARE ROLLBACK (sembra funzionare)
