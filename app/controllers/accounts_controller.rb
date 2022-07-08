@@ -25,6 +25,8 @@ class AccountsController < ApplicationController
 		# Eliminare l'utente elmina anche tutte le reviews e i voti alle reviews associati ad esso
 		user = current_user
 		sign_out user
+		# Imposta lo user_id degli ordini effettuati a null
+		Order.where(user_id: user.id).update_all(user_id: nil)
 		user.avatar.purge
 		if user.destroy
 			render json: { message: "User deleted.", data: user }, status: :ok

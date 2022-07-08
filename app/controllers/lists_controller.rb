@@ -4,7 +4,7 @@ class ListsController < ApplicationController
 		# da rifare meglio
         lists = List.where(user_id: current_user.id)
 		user_lists = lists.map do |l|
-			{ :id => l.id, name: l.name, :products => l.products }
+			{ :id => l.id, name: l.name }
 		  end
         render json: { data: user_lists } 
     end
