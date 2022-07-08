@@ -4,18 +4,12 @@ class VotesController < ApplicationController
 	before_action :set_vote, only: %i[ show edit update destroy]
 
 	def show
-        # Dare una risposta particolare in caso di voto non presente?
+        authorize! :read, Vote, :message => "BEWARE: you are not authorized to read votes."
 		render json: { data: @vote }
 	end
 	
-	def new
-	end
-
-	def edit
-	end
-	
 	def create
-		#authorize! :create, @review, :message => "BEWARE: you are not authorized to create new reviews."
+		authorize! :create, Vote, :message => "BEWARE: you are not authorized to create votes."
 
         # { ... "vote": { "likes": true } ... }
 		@vote = Vote.new(review_id: @review, user_id: @user, likes: @likes)
@@ -27,7 +21,7 @@ class VotesController < ApplicationController
 	end
 
 	def update
-		#authorize! :update, @movie, :message => "BEWARE: you are not authorized to update existing movies."
+		authorize! :update, Vote, :message => "BEWARE: you are not authorized to update votes."
 
 		if @vote.update(params.require(:vote).permit(:likes))
 			render json: { message: "Vote was successfully updated.", data: @vote }, status: :ok
@@ -37,6 +31,8 @@ class VotesController < ApplicationController
 	end
 
     def destroy
+		authorize! :destroy, Vote, :message => "BEWARE: you are not authorized to delete votes."
+
         if @vote.update(likes: nil)
             render json: { message: "Vote was successfully deleted.", data: @vote }, status: :ok
         else

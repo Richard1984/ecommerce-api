@@ -2,10 +2,12 @@ class ShopsController < ApplicationController
     # before_action :authenticate_user! #forza autenticazione
 
     def show
+        authorize! :read, Shop, :message => "BEWARE: you are not authorized to read shop information."
         render json: { data: Shop.instance}
     end
 
     def update
+        authorize! :update, Shop, :message => "BEWARE: you are not authorized to modify shop information."
         if Shop.instance.update(params.require(:shop).permit(
             :name,
             :surname,

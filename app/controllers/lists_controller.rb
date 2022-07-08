@@ -1,7 +1,8 @@
 class ListsController < ApplicationController
 
     def index
-		# da rifare meglio
+		authorize! :read, List, :message => "BEWARE: you do not have lists, since you are not logged in."
+
         lists = List.where(user_id: current_user.id)
 		user_lists = lists.map do |l|
 			{ :id => l.id, name: l.name }
@@ -10,20 +11,19 @@ class ListsController < ApplicationController
     end
 
 	def show
-        # forse si puo fare il check con authorize?
+        authorize! :read, List, :message => "BEWARE: you do not have lists, since you are not logged in."
+
 		list = List.find_by(id: params[:id], user_id: current_user.id)
         if list
-			# da rifare meglio
             render json: { data: { list: list, products: list.products } }, status: :ok
         else
             render json: { message: "List #{params[:id]} for user #{current_user.email} not found." }, status: :not_found
         end
 	end
 	
-	def new
-	end
-	
 	def create
+		authorize! :create, List, :message => "BEWARE: you are not authorized to create lists."
+
 		products = params[:products]
 		name = params[:name] 
 		if !name
@@ -51,11 +51,8 @@ class ListsController < ApplicationController
 		end
 	end
 
-    def edit
-    end
-
     def update
-        # authorize
+        authorize! :update, List, :message => "BEWARE: you do not have lists, since you are not logged in."
 
         products_to_add = params[:products_to_add]
         products_to_delete = params[:products_to_delete]
@@ -87,7 +84,7 @@ class ListsController < ApplicationController
     end
 
     def destroy
-        # authorize
+        authorize! :destroy, List, :message => "BEWARE: you do not have lists, since you are not logged in."
 
         list = List.find(params[:id])
         begin

@@ -72,6 +72,10 @@ GEM
     bootsnap (1.12.0)
       msgpack (~> 1.2)
     builder (3.2.4)
+    canard (0.6.2.pre)
+      cancancan (>= 1, < 3.0)
+      role_model (~> 0)
+    cancancan (2.3.0)
     concurrent-ruby (1.1.10)
     crass (1.0.6)
     debug (1.5.0)
@@ -206,6 +210,7 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.5)
+    role_model (0.8.2)
     ruby2_keywords (0.0.5)
     sqlite3 (1.4.4)
     strscan (3.0.3)
@@ -230,6 +235,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
+  canard (~> 0.6.2.pre)
   debug
   devise
   devise-jwt

@@ -4,23 +4,18 @@ class ReviewsController < ApplicationController
 	before_action :set_review, only: %i[ show edit update ]
 
 	def index
+		authorize! :read, Review, :message => "BEWARE: you are not authorized to read reviews."
 		@reviews = Review.where(product_id: params[:product_id])
 		render json: { data: @reviews }
 	end
 
 	def show
+		authorize! :read, Review, :message => "BEWARE: you are not authorized to read reviews."
 		render json: { data: @review }
 	end
 	
-	def new
-		@review = Review.new
-	end
-
-	def edit
-	end
-	
 	def create
-		#authorize! :create, @review, :message => "BEWARE: you are not authorized to create new reviews."
+		authorize! :create, Review, :message => "BEWARE: you are not authorized to create reviews."
 
 		@review = Review.new(review_params)
 		@review.product_id = params[:product_id]
@@ -32,7 +27,7 @@ class ReviewsController < ApplicationController
 	end
 
 	def update
-		#authorize! :update, @movie, :message => "BEWARE: you are not authorized to update existing movies."
+		authorize! :update, Review, :message => "BEWARE: you are not authorized to update reviews."
 
 		if @review.update(review_params)
 			render json: { message: "Review was successfully updated.", data: @review }, status: :ok

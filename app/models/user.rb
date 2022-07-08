@@ -13,6 +13,8 @@ class User < ApplicationRecord
   has_many :carts, dependent: :destroy
   has_one_attached :avatar
 
+  acts_as_user :roles => :admin
+
   def self.find_or_create_with_facebook_access_token(oauth_access_token)
     @graph = Koala::Facebook::API.new(oauth_access_token)
     profile = @graph.get_object('me', fields: ['firstname', 'lastname', 'picture', 'email'])

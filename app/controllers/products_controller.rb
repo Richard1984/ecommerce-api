@@ -2,10 +2,12 @@ class ProductsController < ApplicationController
 	before_action :set_product, only: %i[ show edit update destroy]
 
     def index
+		authorize! :read, Product, :message => "BEWARE: you are not authorized to read products."
         render json: { data: search_and_order }
     end
 
     def show
+		authorize! :read, @product, :message => "BEWARE: you are not authorized to read products."
 		images = []
 		if @product.images.attached?
 			@product.images.each do |image|
@@ -20,16 +22,8 @@ class ProductsController < ApplicationController
         render json: { data: product_json }
 	end
 	
-	def new
-		# inutile
-		@product = Product.new
-	end
-
-	def edit
-	end
-	
 	def create
-		#authorize! :create, @review, :message => "BEWARE: you are not authorized to create new reviews."
+		authorize! :create, Product, :message => "BEWARE: you are not authorized to create products."
 
 		# Per creare un prodotto con immagini devi prima fare un post sul prodotto e poi fare un post sulle immagini del prodotto
 		@product = Product.new(product_params)
@@ -41,7 +35,7 @@ class ProductsController < ApplicationController
 	end
 
 	def update
-		#authorize! :update, @movie, :message => "BEWARE: you are not authorized to update existing movies."
+		authorize! :update, @product, :message => "BEWARE: you are not authorized to update products."
 
 		if @product.update(product_params)
 			render json: { message: "Product was successfully updated.", data: @product }, status: :ok
@@ -51,13 +45,11 @@ class ProductsController < ApplicationController
 	end
 
 	def destroy
-		#authorize! :destroy, @review, :message => "BEWARE: you are not authorized to destroy existing reviews."
+		authorize! :destroy, @product, :message => "BEWARE: you are not authorized to delete products."
 
 		#@product.images.purge
 		#@product.destroy
 
-		# E' probabilmente meglio rendere il prodotto non disponibile invece di cancellarlo
-		# In questo modo si possono preservare tutti i vari ordini e le liste
 		# Forse cambiare la colonna availability in stock per evitare confusioni
 		# Cambiare file user stories?
 		@product.update(availability: 0, available: false)
@@ -66,6 +58,7 @@ class ProductsController < ApplicationController
 	end
 
     def update_images
+		authorize! :update, @product, :message => "BEWARE: you are not authorized to update products."
 		# errori?
 		product = Product.find(params[:product_id])
 		product.images.attach(params[:images])
@@ -73,6 +66,7 @@ class ProductsController < ApplicationController
 	end
 
 	def destroy_images
+		authorize! :update, @product, :message => "BEWARE: you are not authorized to update products."
 		
 		images_to_destroy = params[:images_ids]
 		images_destroyed = []

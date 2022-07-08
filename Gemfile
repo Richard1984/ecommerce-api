@@ -44,6 +44,9 @@ gem "rack-cors"
 
 gem 'devise-jwt'
 
+# Autorizzazione
+gem 'canard', '~> 0.6.2.pre'
+
 gem 'dry-configurable', '0.13.0'
 
 group :development, :test do

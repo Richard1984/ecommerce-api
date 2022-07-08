@@ -1,6 +1,7 @@
 class CartsController < ApplicationController
     #dubbio sul eliminare tutti i prodotti nel carello dopo l'ordine 
     def index
+        authorize! :read, Cart, :message => "BEWARE: you do not have a cart, since you are not logged in."
 		# per il venditore si potrebbe far vedere tutti i carelli attivi
         products = Cart.where(user_id: current_user.id,filled:false)
 		user_cart = products.map { |p|
@@ -14,6 +15,7 @@ class CartsController < ApplicationController
     end
 
     def create
+        authorize! :create, Cart, :message => "BEWARE: you do not have a cart, since you are not logged in."
         p = Cart.find_by(user_id: current_user.id,product_id:params[:product_id],filled:false)
         if p
             quantity = params[:quantity] + p[:quantity]
@@ -33,6 +35,7 @@ class CartsController < ApplicationController
 	end
     
     def destroy
+        authorize! :destroy, Cart, :message => "BEWARE: you do not have a cart, since you are not logged in."
         #con id si intende l'id del prodotto e non della cart
         product = Cart.find_by(user_id: current_user.id,product_id:params[:id],filled:false)
         if product

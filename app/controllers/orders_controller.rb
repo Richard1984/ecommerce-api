@@ -1,22 +1,28 @@
 class OrdersController < ApplicationController
     def index
-		# Questo e' index per user corrente, index per negoziante da fare dopo con roles
-		# if negoziante then orders = Order.all
-        orders = Order.where(user_id: current_user.id)
+		authorize! :read, Order, :message => "BEWARE: you are not authorized to read orders."
+		if current_user.has_role? :admin
+			orders = Order.all 
+		else
+        	orders = Order.where(user_id: current_user.id)
+		end
 		user_order = orders.map { |o|
 			{ 
 				:id => o.id, 
 				:products => full_order(o)
 			}
-		}	
-		# Forse e' meglio passare tutto l'ordine e gli order_products
+		}
         render json: { data: user_order} 
     end
 
 	def show
-		# Questo e' show per user corrente, show per negoziante da fare dopo con roles
-		# if negoziante then order = Order.find(params[:id])
-		order = Order.find_by(id: params[:id], user_id: current_user.id)
+		authorize! :read, Order, :message => "BEWARE: you are not authorized to read orders."
+		if current_user.has_role? :admin 
+			order = Order.find(params[:id])
+		else
+			order = Order.find_by(id: params[:id], user_id: current_user.id)
+		end
+		
         if order
 			full_order_info = full_order(order)
             render json: { data: full_order_info}, status: :ok
@@ -27,7 +33,8 @@ class OrdersController < ApplicationController
 	
 	
 	def create
-		# FARE CHECK DISPONIBILITA E IN CASO FARE ROLLBACK (sembra funzionare)
+		authorize! :create, Order, :message => "BEWARE: you are not authorized to create orders."
+
 		products = params[:products]
 		order = Order.new(user_id: current_user.id)
 		begin

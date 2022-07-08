@@ -1,18 +1,12 @@
 class CategoriesController < ApplicationController
     
     def index
+		authorize! :read, Category, :message => "BEWARE: you are not authorized to read categories."
         render json: { data: Category.all }
     end
-
-    def new
-		@category = Category.new
-	end
-
-	def edit
-	end
 	
 	def create
-		#authorize! :create, @review, :message => "BEWARE: you are not authorized to create new reviews."
+		authorize! :create, Category, :message => "BEWARE: you are not authorized to create categories."
 
 		@category = Category.new(params.require(:category).permit(:name))
 		if @category.save
@@ -24,7 +18,7 @@ class CategoriesController < ApplicationController
 
 	# NON E' tra le user stories
 	def update
-		#authorize! :update, @movie, :message => "BEWARE: you are not authorized to update existing movies."
+		authorize! :update, Category, :message => "BEWARE: you are not authorized to update categories."
 
 		@category = Category.find(params[:id])
 		if @category.update(params.require(:category).permit(:name))
@@ -36,7 +30,7 @@ class CategoriesController < ApplicationController
 
 	# NON E' tra le user stories
 	def destroy
-		#authorize! :destroy, @review, :message => "BEWARE: you are not authorized to destroy existing reviews."
+		authorize! :destroy, Category, :message => "BEWARE: you are not authorized to delete categories."
 
         @category = Category.find(params[:id])
 		# Imposta category_id=null ai prodotti che appartengono a questa categoria 
