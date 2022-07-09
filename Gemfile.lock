@@ -76,6 +76,7 @@ GEM
       cancancan (>= 1, < 3.0)
       role_model (~> 0)
     cancancan (2.3.0)
+    choice (0.2.0)
     concurrent-ruby (1.1.10)
     crass (1.0.6)
     debug (1.5.0)
@@ -194,6 +195,11 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
+    rails-erd (1.7.1)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
     railties (7.0.3)
@@ -211,6 +217,8 @@ GEM
       railties (>= 5.0)
     rexml (3.2.5)
     role_model (0.8.2)
+    ruby-graphviz (1.2.5)
+      rexml
     ruby2_keywords (0.0.5)
     sqlite3 (1.4.4)
     strscan (3.0.3)
@@ -244,6 +252,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.3)
+  rails-erd
   sqlite3 (~> 1.4)
   tzinfo-data
 

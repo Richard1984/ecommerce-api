@@ -11,7 +11,7 @@ class CartsController < ApplicationController
 			}
 		}	
 		
-        render json: { data: user_cart} 
+        render json: { data: user_cart}, status: :ok
     end
 
     def update
@@ -67,7 +67,7 @@ class CartsController < ApplicationController
                 render json: { message: "Couldn't find this product in the cart.", data: {product_id:params[:id]} }, status: :not_acceptable
             end
         else 
-            render json: { message: "operation not available, enter a valid operation ['update','remove','create']"}
+            render json: { message: "operation not available, enter a valid operation ['update','remove','create']"}, status: :not_acceptable
         end
     end
 
@@ -75,7 +75,7 @@ class CartsController < ApplicationController
         if Cart.where(user_id: current_user.id).delete_all
             render json: { message: "the Cart was succesfully emptied."  }, status: :ok
         else
-            render json: { message: "the Cart was succesfully emptied."  }, status: :ok
+            render json: { message: "the Cart was not succesfully emptied."  }, status: :not_acceptable
         end
     end
 
