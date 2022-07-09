@@ -2,9 +2,10 @@ class AccountsController < ApplicationController
 
 	#Non so come farlo funzionare, al momento se non sei autenticato restituisce un user nullo
     #before_action :authenticate_user!
+	# Potremmo fare una funzione custom che sostituisce authenticate_user!, che manda un json che da' un errore specifico, e il client quando legge quell'errore rimanda l'utente alla pagina di login prima di inviare le richieste
 
 	def show
-		authorize! :read, current_user, :message => "BEWARE: you are not authorized to read this."
+		authorize! :read, current_user, :message => "BEWARE: you are not authorized to read account information."
 
 		current_user_json = JSON.parse(current_user.to_json)
 		current_user_json[:avatar] = user_avatar
@@ -12,11 +13,8 @@ class AccountsController < ApplicationController
 		render json: { data: current_user_json }
 	end
 
-	def edit
-	end
-
 	def update
-		authorize! :update, current_user, :message => "BEWARE: you are not authorized to modify this."
+		authorize! :update, current_user, :message => "BEWARE: you are not authorized to modify account information."
 		# si dovrebbe richiedere la password
 
 		if current_user.update(params.require(:user).permit(:email, :firstname, :lastname, :country)) # non so se accettare la mail qui crea problemi
@@ -27,7 +25,7 @@ class AccountsController < ApplicationController
 	end
 
 	def destroy
-		authorize! :destroy, current_user, :message => "BEWARE: you are not authorized to delete this."
+		authorize! :destroy, current_user, :message => "BEWARE: you are not authorized to delete account."
 		# Eliminare l'utente elmina anche tutte le reviews e i voti alle reviews associati ad esso
 		user = current_user
 		sign_out user
