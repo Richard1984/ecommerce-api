@@ -101,6 +101,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_08_132432) do
     t.integer "availability", default: 0, null: false
     t.decimal "price", precision: 6, scale: 2, default: "0.0", null: false
     t.text "description", default: ""
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "category_id"
     t.boolean "available", default: true
     t.index ["category_id"], name: "index_products_on_category_id"
@@ -143,7 +145,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_08_132432) do
     t.string "uid"
     t.string "firstname"
     t.string "lastname"
-    t.string "contry"
+    t.string "country"
     t.integer "roles_mask"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
