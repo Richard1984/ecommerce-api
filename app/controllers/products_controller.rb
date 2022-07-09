@@ -104,9 +104,9 @@ class ProductsController < ApplicationController
         # Forse si puo' fare piu' pulito
         category_id = params[:category_id]
         search_name = params[:search_name]
-        if params[:sort]
-            sorting_criteria = params[:sort][:criteria]
-            sorting_order = params[:sort][:order] ? params[:sort][:order] : :asc # asc / desc
+        if params[:sort_criteria]
+            sorting_criteria = params[:sort_criteria]
+            sorting_order = params[:sort_order] ? params[:sort_order] : :asc # asc / desc
         else
             sorting_criteria = nil
             sorting_order = nil
@@ -115,7 +115,17 @@ class ProductsController < ApplicationController
         @products = Product.where(available: true) # index mostra solo i prodotti disponibili
         @products = @products.where(category_id: category_id) if category_id # Filter by category
         @products = @products.where("name like ?", "%#{search_name}%") if search_name # Select containing name
-        @products = @products.order(sorting_criteria => sorting_order) if sorting_criteria # Sort
+		# Sort
+        if sorting_criteria == "total_ordered"
+			# fare meglio?
+			if sorting_order == "asc"
+				@products = @products.sort { |p1,p2| p1.total_ordered <=> p2.total_ordered }
+			else
+				@products = @products.sort { |p1,p2| p2.total_ordered <=> p1.total_ordered }
+			end
+		else
+			@products = @products.order(sorting_criteria => sorting_order) 
+		end
         return @products
     end
 end

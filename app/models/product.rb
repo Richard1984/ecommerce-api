@@ -32,4 +32,12 @@ class Product < ApplicationRecord
 			return "--"
 		end
 	end
+
+	def total_ordered
+		sum = 0
+		self.order_products.each do |op|
+			sum = sum + op.quantity
+		end
+		return sum
+	end
 end
