@@ -29,8 +29,16 @@ class Product < ApplicationRecord
 		if self.reviews.count>0
 			return sum/self.reviews.count
 		else
-			return "--"
+			return nil
 		end
+	end
+
+	def reviews_by_star
+		stars = [0,0,0,0,0,0]
+		self.reviews.each do |review|
+			stars[review.stars] += 1
+		end
+		return stars
 	end
 
 	def total_ordered

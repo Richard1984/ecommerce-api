@@ -17,8 +17,17 @@ class ProductsController < ApplicationController
 			end
 		end
 		product_json = JSON.parse(@product.to_json)
+		product_json[:category_name] = Category.find(@product.category_id).name
 		product_json[:images] = images
 		product_json[:avg_reviews] = @product.avg_reviews
+		product_json[:reviews_by_stars] = {
+			"0": @product.reviews_by_star[0],
+			"1": @product.reviews_by_star[1],
+			"2": @product.reviews_by_star[2],
+			"3": @product.reviews_by_star[3],
+			"4": @product.reviews_by_star[4],
+			"5": @product.reviews_by_star[5]
+		}
         render json: { data: product_json }
 	end
 	

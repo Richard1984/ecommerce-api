@@ -6,12 +6,17 @@ class ReviewsController < ApplicationController
 	def index
 		authorize! :read, Review, :message => "BEWARE: you are not authorized to read reviews."
 		@reviews = Review.where(product_id: params[:product_id])
-		render json: { data: @reviews }
+
+		reviews_json = @reviews.map do |review|
+			add_user_info(review)
+		end
+
+		render json: { data: reviews_json }
 	end
 
 	def show
 		authorize! :read, Review, :message => "BEWARE: you are not authorized to read reviews."
-		render json: { data: @review }
+		render json: { data: add_user_info(@review) }
 	end
 	
 	def create
@@ -44,5 +49,16 @@ class ReviewsController < ApplicationController
 
 	def review_params
 		params.require(:review).permit(:stars, :comments, :user_id)
+	end
+
+	def add_user_info(review)
+		review_json = JSON.parse(review.to_json)
+		review_json[:user] = {
+			firstname: review.user.firstname,
+			lastname: review.user.lastname,
+			roles: review.user.roles,
+			avatar: review.user.avatar.attached? ? url_for(review.user.avatar) : nil
+		}
+		return review_json
 	end
 end

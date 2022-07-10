@@ -33,7 +33,7 @@ class VotesController < ApplicationController
     def destroy
 		authorize! :destroy, Vote, :message => "BEWARE: you are not authorized to delete votes."
 
-        if @vote.update(likes: nil)
+        if @vote.destroy
             render json: { message: "Vote was successfully deleted.", data: @vote }, status: :ok
         else
 			render json: { message: "Could not delete vote", data: @vote.errors }, status: :not_acceptable
