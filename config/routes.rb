@@ -22,9 +22,11 @@ Rails.application.routes.draw do
         registration: :signup
       }
     end
+
+  resources :reviews, only: [:show, :create, :update]
   
   resources :products do
-    resources :reviews, only: [:new, :show, :create, :index, :edit, :update] do
+    resources :reviews, only: [:show, :create, :index, :update] do
       resource :vote, except: :index
     end
     post "images", to: "products#update_images"
@@ -34,7 +36,7 @@ Rails.application.routes.draw do
     resources :products, only: [:index]
   end
 
-  resource :account, only: [:show, :edit, :update, :destroy] do
+  resource :account, only: [:show, :update, :destroy] do
     get "avatar", to: "accounts#get_avatar"
     post "avatar", to: "accounts#update_avatar"
     delete "avatar", to: "accounts#destroy_avatar"

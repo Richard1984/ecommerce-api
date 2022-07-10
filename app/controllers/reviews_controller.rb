@@ -1,6 +1,4 @@
 class ReviewsController < ApplicationController
-	# TODO: valutazione recensione
-	# before_action :authenticate_user! #forza autenticazione
 	before_action :set_review, only: %i[ show edit update ]
 
 	def index
@@ -48,7 +46,7 @@ class ReviewsController < ApplicationController
 	end
 
 	def review_params
-		params.require(:review).permit(:stars, :comments, :user_id)
+		params.require(:review).permit(:stars, :comments).merge(user_id: current_user.id)
 	end
 
 	def add_user_info(review)
