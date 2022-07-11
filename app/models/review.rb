@@ -11,4 +11,13 @@ class Review < ApplicationRecord
     validate :stars_between_0_and_5
     validates :product, uniqueness: { scope: :user,
         message: "only one review per user" }
+    
+    def total_likes_dislikes
+        likes = dislikes = 0
+        self.votes.each do |vote|
+            vote.likes ? likes += 1 : dislikes += 1
+        end
+
+        return likes, dislikes
+    end
 end
