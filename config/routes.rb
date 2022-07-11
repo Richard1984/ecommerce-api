@@ -46,4 +46,9 @@ Rails.application.routes.draw do
   end
 
   resource :shop, only: [:show, :update]
+
+  resource :payment, only: [:show, :update] do
+    post "create_order", to: "payments#create_order"
+    post "success", to: "payments#success"
+  end
 end

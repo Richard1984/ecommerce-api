@@ -50,6 +50,9 @@ gem 'canard', '~> 0.6.2.pre'
 
 gem 'dry-configurable', '0.13.0'
 
+# Use stripe
+gem "stripe"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]

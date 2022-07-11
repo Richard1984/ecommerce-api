@@ -221,6 +221,7 @@ GEM
       rexml
     ruby2_keywords (0.0.5)
     sqlite3 (1.4.4)
+    stripe (6.5.0)
     strscan (3.0.3)
     thor (1.2.1)
     timeout (0.3.0)
@@ -254,6 +255,7 @@ DEPENDENCIES
   rails (~> 7.0.3)
   rails-erd
   sqlite3 (~> 1.4)
+  stripe
   tzinfo-data
 
 RUBY VERSION
