@@ -19,6 +19,8 @@ module EcommerceApi
     config.i18n.default_locale = :'it'
 
     config.hosts << "api"
+    config.hosts << "www.amnazom.davegabe.it"
+    config.hosts << "amnazom.davegabe.it"
 
     # Configuration for the application, engines, and railties goes here.
     #
