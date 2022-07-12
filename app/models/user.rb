@@ -1,3 +1,4 @@
+require 'open-uri'
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -18,6 +19,9 @@ class User < ApplicationRecord
   def self.find_or_create_with_facebook_access_token(oauth_access_token)
     @graph = Koala::Facebook::API.new(oauth_access_token)
     profile = @graph.get_object('me', fields: ['first_name', 'last_name', 'picture', 'email'])
+    puts "AAAAAAAAAAAAAA\n"
+    puts profile
+    puts "AAAAAAAAAAAAAA\n"
 
     data = {
       firstname: profile['first_name'],
@@ -27,7 +31,7 @@ class User < ApplicationRecord
       provider: 'facebook',
       # oauth_token: oauth_access_token,
       # avatar: "https://graph.facebook.com/#{profile['id']}/picture?type=large",
-      avatar: profile['picture'],
+      # avatar: profile['picture']['data']['url'],
       password: SecureRandom.urlsafe_base64
     }
 
@@ -38,6 +42,9 @@ class User < ApplicationRecord
     else
       user = User.create(data) # error handling?
     end
+
+    avatar = URI.parse(profile['picture']['data']['url']).open
+    user.avatar.attach(io: avatar, filename: "avatar.jpg")
 
     token = user.generate_jwt
 

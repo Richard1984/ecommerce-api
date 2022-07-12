@@ -59,7 +59,7 @@ class ReviewsController < ApplicationController
 		}
 		votes = review.total_likes_dislikes
 		review_json[:votes] = {
-			likes: votes[0]
+			likes: votes[0],
 			dislikes: votes[1]
 		}
 		return review_json
