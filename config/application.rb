@@ -18,6 +18,8 @@ module EcommerceApi
     config.i18n.available_locales = ["en", "it"]
     config.i18n.default_locale = :'it'
 
+    config.hosts << "api"
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
