@@ -17,7 +17,7 @@ class User < ApplicationRecord
 
   def self.find_or_create_with_facebook_access_token(oauth_access_token)
     @graph = Koala::Facebook::API.new(oauth_access_token)
-    profile = @graph.get_object('me', fields: ['firstname', 'lastname', 'picture', 'email'])
+    profile = @graph.get_object('me', fields: ['first_name', 'last_name', 'picture', 'email'])
 
     data = {
       firstname: profile['first_name'],
