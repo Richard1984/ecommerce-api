@@ -19,9 +19,6 @@ class User < ApplicationRecord
   def self.find_or_create_with_facebook_access_token(oauth_access_token)
     @graph = Koala::Facebook::API.new(oauth_access_token)
     profile = @graph.get_object('me', fields: ['first_name', 'last_name', 'picture', 'email'])
-    puts "AAAAAAAAAAAAAA\n"
-    puts profile
-    puts "AAAAAAAAAAAAAA\n"
 
     data = {
       firstname: profile['first_name'],
@@ -52,8 +49,12 @@ class User < ApplicationRecord
   end
 
   def generate_jwt
-    JWT.encode({ id: id,
-              exp: 60.days.from_now.to_i },
-             Rails.application.credentials.secret_key_base)
+    Warden::JWTAuth::TokenEncoder
+    .new
+    .call({
+      sub: id,
+      aud: nil,
+      scp: "user"
+    })
   end
 end
