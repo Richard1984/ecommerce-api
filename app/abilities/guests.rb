@@ -3,6 +3,6 @@ Canard::Abilities.for(:guest) do
 
   # L'ordine e' importante, non so quale linea va prima
   cannot :manage, [Category, Product, Cart, List, Review, Vote]
-  can :read, [Review, Vote, Category, Product]
+  can :read, [Review, Category, Product]
 
 end

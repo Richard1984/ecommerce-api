@@ -1,15 +1,15 @@
 class VotesController < ApplicationController
-	# before_action :authenticate_user! #forza autenticazione
-    before_action :vote_params
-	before_action :set_vote, only: %i[ show edit update destroy]
 
 	def show
         authorize! :read, Vote, :message => "BEWARE: you are not authorized to read votes."
+		vote_params
+		set_vote
 		render json: { data: @vote }
 	end
 	
 	def create
 		authorize! :create, Vote, :message => "BEWARE: you are not authorized to create votes."
+		vote_params
 
         # { ... "vote": { "likes": true } ... }
 		@vote = Vote.new(review_id: @review, user_id: @user, likes: @likes)
@@ -22,6 +22,8 @@ class VotesController < ApplicationController
 
 	def update
 		authorize! :update, Vote, :message => "BEWARE: you are not authorized to update votes."
+		vote_params
+		set_vote
 
 		if @vote.update(params.require(:vote).permit(:likes))
 			render json: { message: "Vote was successfully updated.", data: @vote }, status: :ok
@@ -32,6 +34,8 @@ class VotesController < ApplicationController
 
     def destroy
 		authorize! :destroy, Vote, :message => "BEWARE: you are not authorized to delete votes."
+		vote_params
+		set_vote
 
         if @vote.destroy
             render json: { message: "Vote was successfully deleted.", data: @vote }, status: :ok
