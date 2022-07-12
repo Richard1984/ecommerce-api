@@ -1,26 +1,16 @@
 class PaymentsController < ApplicationController
     Stripe.api_key = Rails.application.credentials.stripe_secret_key
     
-    def create_order
-        user_id = params[:user_id]
-        # user_cart = Cart.where(user_id: user_id, filled:false)
-        # sample data test
-        user_cart = [
-            {
-                id: 1,
-                name: "Product 1",
-                price: 10.25,
-                quantity: 1
-            },
-            {
-                id: 2,
-                name: "Product 2",
-                price: 20,
-                quantity: 2
-            }
-        ]
+    def show
+        products = Cart.where(user_id: current_user.id)
+		user_cart = products.map { |p|
+			{ 
+				:product => Product.where(id:p[:product_id]).first,
+                :quantity => p[:quantity]
+			}
+		}
         # amount is the sum of all the products in the cart
-        amount = user_cart.map { |product| product[:price] * product[:quantity] }.sum
+        amount = user_cart.map { |p| p[:product][:price] * p[:quantity] }.sum
         # Create a PaymentIntent with amount and currency
         payment_intent = Stripe::PaymentIntent.create(
             amount: (amount*100).to_i,

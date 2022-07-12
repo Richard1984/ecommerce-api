@@ -60,3 +60,7 @@ OrderProduct.create!([
   {order_id: 6, product_id: 5, quantity: 98},
   {order_id: 6, product_id: 13, quantity: 12}
 ])
+Cart.create!([
+  { user_id: 4, product_id: 1, quantity: 2 },
+  { user_id: 4, product_id: 3, quantity: 2 },
+])

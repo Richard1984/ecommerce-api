@@ -6,7 +6,7 @@ class CartsController < ApplicationController
         products = Cart.where(user_id: current_user.id)
 		user_cart = products.map { |p|
 			{ 
-				:product => Product.where(id:p[:product_id]),
+				:product => Product.where(id:p[:product_id]).first,
                 :quantity => p[:quantity]
 			}
 		}	
