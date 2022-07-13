@@ -9,7 +9,7 @@ class OrdersController < ApplicationController
 		user_order = orders.map { |o|
 			{ 
 				:id => o.id, 
-				:products => full_order(o)
+				:items => full_order(o)
 			}
 		}
         render json: { data: user_order} 
@@ -68,7 +68,7 @@ private
 def full_order(order)
 	order.products.map{ |p|
 		{
-			:info => p,
+			:product => p,
 			:quantity => OrderProduct.find_by(product_id: p[:id],order_id:order[:id])[:quantity]
 		}
 	}
