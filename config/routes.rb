@@ -40,7 +40,7 @@ Rails.application.routes.draw do
     get "avatar", to: "accounts#get_avatar"
     post "avatar", to: "accounts#update_avatar"
     delete "avatar", to: "accounts#destroy_avatar"
-    resources :orders, only: [:show, :create, :index]
+    resources :orders, only: [:show, :create, :index, :update]
     resources :lists
     resource :cart, only: [ :update, :show, :create, :destroy]
   end

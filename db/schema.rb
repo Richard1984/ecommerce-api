@@ -93,7 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_14_161132) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
-    t.string "status", default: "pending"
+    t.integer "status", default: 0
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 

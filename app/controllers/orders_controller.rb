@@ -3,15 +3,24 @@ class OrdersController < ApplicationController
 		authorize! :read, Order, :message => "BEWARE: you are not authorized to read orders."
 		if current_user.has_role? :admin
 			orders = Order.all 
-		else
-        	orders = Order.where(user_id: current_user.id)
-		end
-		user_order = orders.map { |o|
+			user_order = orders.map { |o|
 			{ 
 				:id => o.id, 
+				:user_id =>o.user_id,
+				:status => o.status,
 				:items => full_order(o)
 			}
 		}
+		else
+        	orders = Order.where(user_id: current_user.id)
+			user_order = orders.map { |o|
+			{ 
+				:id => o.id, 
+				:status => o.status,
+				:items => full_order(o)
+			}
+		}
+		end
         render json: { data: user_order} 
     end
 
@@ -19,13 +28,15 @@ class OrdersController < ApplicationController
 		authorize! :read, Order, :message => "BEWARE: you are not authorized to read orders."
 		if current_user.has_role? :admin 
 			order = Order.find(params[:id])
-		else
+		else 
 			order = Order.find_by(id: params[:id], user_id: current_user.id)
-		end
-		
+		end 
         if order
 			full_order_info = full_order(order)
-            render json: { data: full_order_info}, status: :ok
+            render json: { data: {
+				:status => order.status,
+				:products => full_order_info
+				}}, status: :ok
         else
             render json: { message: "Order #{params[:id]} for user #{current_user.email} not found." }, status: :not_found
         end
@@ -62,7 +73,34 @@ class OrdersController < ApplicationController
 		end
 	end
 	def update
-		
+		authorize! :update, Order, :message => "BEWARE: you are not authorized to modify orders."
+		case params[:op]
+        when "next"
+			cart = Order.find_by(user_id: params[:id])
+            if cart
+				status = cart[:status] + 1
+				if cart.update_columns(status:status)
+					render json: { message: "Status correctly updated", data: cart }, status: :ok
+				else
+					render json: { message: "Could not update the status", data: cart.errors }, status: :not_acceptable
+				end
+			else
+				render json: { message:"Order #{params[:id]} for user #{current_user.email} not found.", data: cart.errors }, status: :not_acceptable
+			end
+		when "previous"
+			cart = Order.find_by(user_id:params[:id])
+            if cart
+				status = cart[:status] - 1
+				if cart.update_columns(status:status)
+					render json: { message: "Status correctly updated", data: cart }, status: :ok
+				else
+					render json: { message: "Could not update the status", data: cart.errors }, status: :not_acceptable
+				end
+			else
+				render json: { message:"Order #{params[:id]} for user #{current_user.email} not found.", data: cart.errors }, status: :not_acceptable
+			end
+		end
+
 	end
 end
 

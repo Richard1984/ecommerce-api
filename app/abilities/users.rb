@@ -4,5 +4,5 @@ Canard::Abilities.for(:user) do
   can :read, [Review, Vote, Category, Product]
   
   cannot [:create, :update, :destroy], [Category, Product]
-
+  cannot [:update], [Order]
 end
