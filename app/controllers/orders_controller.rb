@@ -1,28 +1,32 @@
-class OrdersController < ApplicationController
+class OrdersController < ApplicationController	
     def index
 		authorize! :read, Order, :message => "BEWARE: you are not authorized to read orders."
 		if current_user.has_role? :admin
 			orders = Order.all 
 			user_order = orders.map { |o|
 			{ 
-				:id => o.id, 
-				:user_id =>o.user_id,
-				:status => o.status,
+				:id => o[:id], 
+				:user_id => o[:user_id],
+				:shipping_status => Order.shipping_statuses[o[:shipping_status]],
+				:payment_status => Order.payment_statuses[o[:payment_status]],
 				:items => full_order(o)
 			}
 		}
 		else
-        	orders = Order.where(user_id: current_user.id)
+			# Get orders paid (or paid_client), hide non completed orders
+        	orders = Order.where(user_id: current_user.id, payment_status: [:paid, :paid_client])
 			user_order = orders.map { |o|
 			{ 
-				:id => o.id, 
-				:status => o.status,
+				:id => o[:id], 
+				:shipping_status => Order.shipping_statuses[o[:shipping_status]],
+				:payment_status => Order.payment_statuses[o[:payment_status]],
 				:items => full_order(o)
 			}
 		}
 		end
         render json: { data: user_order} 
     end
+
 
 	def show
 		authorize! :read, Order, :message => "BEWARE: you are not authorized to read orders."
@@ -32,72 +36,76 @@ class OrdersController < ApplicationController
 			order = Order.find_by(id: params[:id], user_id: current_user.id)
 		end 
         if order
-			full_order_info = full_order(order)
-            render json: { data: {
-				:status => order.status,
-				:products => full_order_info
-				}}, status: :ok
+			render json: { data: {
+				:id => params[:id],
+				:shipping_status => Order.shipping_statuses[order[:shipping_status]],
+				:payment_status => Order.payment_statuses[order[:payment_status]],
+				:items => full_order(order),
+				:receipt_url => ""
+			}}, shipping_status: :ok
         else
-            render json: { message: "Order #{params[:id]} for user #{current_user.email} not found." }, status: :not_found
+            render json: { message: "Order #{params[:id]} for user #{current_user.email} not found." }, shipping_status: :not_found
         end
 	end
 	
 	
-	def create
-		authorize! :create, Order, :message => "BEWARE: you are not authorized to create orders."
+	# def create
+	# 	authorize! :create, Order, :message => "BEWARE: you are not authorized to create orders."
 
-		products = params[:products]
-		order = Order.new(user_id: current_user.id)
-		begin
-			Order.transaction do
-				order.save!
-				OrderProduct.transaction do
-					products.each do |p|
-						prod = Product.find_by(id:p[:id])
-						av = prod[:availability] - p[:quantity]
-						if av<0
-							raise StandardError.new("Not enough products")
-						else
-							prod.update_columns(availability:av)
-							op = OrderProduct.new(order_id:order[:id],product_id:p[:id],quantity:p[:quantity])
-							op.save!
-						end
-					end
-				end
-			end
-		rescue Exception => e
-            render json: { message: "Could not generate order", data: e }, status: 500
-		else
-			# Forse e' meglio passare tutto l'ordine e gli order_products
-			render json: { message: "Order added.", data: order }, status: :ok
-		end
-	end
-	def update
+	# 	products = params[:products]
+	# 	order = Order.new(user_id: current_user.id)
+	# 	begin
+	# 		Order.transaction do
+	# 			order.save!
+	# 			OrderProduct.transaction do
+	# 				products.each do |p|
+	# 					prod = Product.find_by(id:p[:id])
+	# 					av = prod[:availability] - p[:quantity]
+	# 					if av<0
+	# 						raise StandardError.new("Not enough products")
+	# 					else
+	# 						prod.update_columns(availability:av)
+	# 						op = OrderProduct.new(order_id:order[:id],product_id:p[:id],quantity:p[:quantity])
+	# 						op.save!
+	# 					end
+	# 				end
+	# 			end
+	# 		end
+	# 	rescue Exception => e
+    #         render json: { message: "Could not generate order", data: e }, shipping_status: 500
+	# 	else
+	# 		# Forse e' meglio passare tutto l'ordine e gli order_products
+	# 		render json: { message: "Order added.", data: order }, shipping_status: :ok
+	# 	end
+	# end
+
+
+	def update_shipping
 		authorize! :update, Order, :message => "BEWARE: you are not authorized to modify orders."
 		case params[:op]
         when "next"
-			cart = Order.find_by(user_id: params[:id])
-            if cart
-				status = cart[:status] + 1
-				if cart.update_columns(status:status)
-					render json: { message: "Status correctly updated", data: cart }, status: :ok
+			order = Order.find_by(user_id: params[:id])
+            if order
+				shipping_status = order[:shipping_status] + 1
+				if order.update_columns(shipping_status:shipping_status)
+					render json: { message: "Shipping status correctly updated", data: order }, shipping_status: :ok
 				else
-					render json: { message: "Could not update the status", data: cart.errors }, status: :not_acceptable
+					render json: { message: "Could not update the shipping status", data: order.errors }, shipping_status: :not_acceptable
 				end
 			else
-				render json: { message:"Order #{params[:id]} for user #{current_user.email} not found.", data: cart.errors }, status: :not_acceptable
+				render json: { message:"Order #{params[:id]} for user #{current_user.email} not found.", data: order.errors }, shipping_status: :not_acceptable
 			end
 		when "previous"
-			cart = Order.find_by(user_id:params[:id])
-            if cart
-				status = cart[:status] - 1
-				if cart.update_columns(status:status)
-					render json: { message: "Status correctly updated", data: cart }, status: :ok
+			order = Order.find_by(user_id:params[:id])
+            if order
+				shipping_status = order[:shipping_status] - 1
+				if order.update_columns(shipping_status:shipping_status)
+					render json: { message: "Shipping status correctly updated", data: order }, shipping_status: :ok
 				else
-					render json: { message: "Could not update the status", data: cart.errors }, status: :not_acceptable
+					render json: { message: "Could not update the shipping status", data: order.errors }, shipping_status: :not_acceptable
 				end
 			else
-				render json: { message:"Order #{params[:id]} for user #{current_user.email} not found.", data: cart.errors }, status: :not_acceptable
+				render json: { message:"Order #{params[:id]} for user #{current_user.email} not found.", data: order.errors }, shipping_status: :not_acceptable
 			end
 		end
 

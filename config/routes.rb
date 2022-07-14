@@ -40,7 +40,9 @@ Rails.application.routes.draw do
     get "avatar", to: "accounts#get_avatar"
     post "avatar", to: "accounts#update_avatar"
     delete "avatar", to: "accounts#destroy_avatar"
-    resources :orders, only: [:show, :create, :index, :update]
+    resources :orders, only: [:show, :create, :index] do
+      put "update_shipping", to: "orders#update_shipping"
+    end
     resources :lists
     resource :cart, only: [ :update, :show, :create, :destroy]
   end
@@ -48,6 +50,7 @@ Rails.application.routes.draw do
   resource :shop, only: [:show, :update]
 
   resource :payment, only: [:show, :update] do
-    post "success", to: "payments#success"
+    post "success/client", to: "payments#success_client"
+    post "success/webhook", to: "payments#success_webhook"
   end
 end
