@@ -61,6 +61,9 @@ class OrdersController < ApplicationController
 			render json: { message: "Order added.", data: order }, status: :ok
 		end
 	end
+	def update
+		
+	end
 end
 
 private

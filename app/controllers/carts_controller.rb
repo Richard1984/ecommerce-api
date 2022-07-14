@@ -1,17 +1,33 @@
-class CartsController < ApplicationController
-    #dubbio sul eliminare tutti i prodotti nel carello dopo l'ordine 
+class CartsController < ApplicationController 
     def show
         authorize! :read, Cart, :message => "BEWARE: you do not have a cart, since you are not logged in."
-		# per il venditore si potrebbe far vedere tutti i carelli attivi
-        products = Cart.where(user_id: current_user.id)
-		user_cart = products.map { |p|
-			{ 
-				:product => Product.where(id:p[:product_id]).first,
-                :quantity => p[:quantity]
-			}
-		}	
-		
-        render json: { data: user_cart}, status: :ok
+        if current_user.has_role? :admin 
+            #forse era meglio mostrare solo gli id degli utenti con un carrello  e poi sare le richieste separatamente
+            carts = Cart.group(:user_id)
+            users_cart = Array.new
+            carts.each{ |c|
+                products = Cart.where(user_id: c[:user_id])
+                users_cart << {
+                        :user_id => c[:user_id],
+                        :products => products.map { |p|
+                            { 
+                                :product => Product.where(id:p[:product_id]).first,
+                                :quantity => p[:quantity]
+                            }
+                        }   
+                    }   	
+            }
+            render json: { data:users_cart}, status: :ok
+        else
+            products = Cart.where(user_id: current_user.id)
+            user_cart = products.map { |p|
+                { 
+                    :product => Product.where(id:p[:product_id]).first,
+                    :quantity => p[:quantity]
+                }
+            }	
+            render json: { data: user_cart}, status: :ok
+        end
     end
 
     def update

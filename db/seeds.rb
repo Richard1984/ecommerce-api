@@ -63,4 +63,6 @@ OrderProduct.create!([
 Cart.create!([
   { user_id: 4, product_id: 1, quantity: 2 },
   { user_id: 4, product_id: 3, quantity: 2 },
+  { user_id: 1, product_id: 5, quantity: 2 },
+  { user_id: 2, product_id: 5, quantity: 2 },
 ])
