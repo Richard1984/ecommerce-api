@@ -2,35 +2,57 @@ Shop.create!([
   {singleton_guard: 0, name: "Pippo", surname: "Baudo", social_reason: "Non so cosa e' una ragione sociale", vat_number: "00012300123", address: "Via dei matti 0", sector: "Informatica"}
 ])
 User.create!([
-    {email: "asd@asd.it", password: "password123"},
-    {email: "asd@asd.com", password: "notapassword"},
-    {email: "keklol@asd.boh", password: "asddsa12"},
-    {email: "ao@ao.it", password: "password", country: "My country changedo", firstname: "Paolo", lastname: "Paoloni", roles_mask: 1},
-    {email: "notadmin@ao.it", password: "password"},
-    {email: "asdoasdo@pippo.bo", password: "pippopappo", firstname: "Pippo", lastname: "Pappo"}
+    {firstname: "Ennio ", lastname: "Babati",email: "asd@asd.it", password: "password123"},
+    {firstname: "Adelasia ", lastname: "Gritti",email: "asd@asd.com", password: "notapassword"},
+    {firstname: "Lara ", lastname: "Sabbatini",email: "keklol@asd.boh", password: "asddsa12"},
+    {firstname: "Paolo", lastname: "Sgalambro",email: "ao@ao.it", password: "password",roles_mask: 1, country: "My country changedo"},
+    {firstname: "Paolo", lastname: "Tomasini",email: "asdoasdo@pippo.bo", password: "pippopappo"},
+    {firstname: "Fiamma", lastname: "Tarchetti",email: "asd12@asd.it", password: "password123"},
+    {firstname: "Lazzaro", lastname: "Traetta",email: "asd13@asd.com", password: "notapassword"},
+    {firstname: "Giacinto", lastname: "Zanzi",email: "keklol14@asd.boh", password: "asddsa12"},
+    {firstname: "Ermes ", lastname: "Vecellio",email: "notadmin15@ao.it", password: "password"},
+    {firstname: "Virginia ", lastname: "Montessori",email: "asdoasdo16@pippo.bo", password: "pippopappo"}
 ])
+
+User.all.each{ |u|
+  s = 'user' + u[:id].to_s + '.png'
+  file = './db/user/' + s
+  u.avatar.attach(io: File.open(file), filename:s )
+}
+
 Category.create!([
-    {name: "categoria1"},
-    {name: "categoria 2"},
-    {name: "categoria modificata"}
+    {name: "Elettronica"},
+    {name: "Abbigliamento"},
+    {name: "Amnazom fresh"},
+    {name: "Film e TV"},
+    {name: "Bellezza"}
 ])
 Product.create!([
-    {name: "prodotto1", availability: 10, price: "24.08", description: "Un prodotto importante", category_id: 1, available: true},
-    {name: "provaNoCat", availability: 0, price: "0.0", description: "", category_id: 1, available: true},
-    {name: "nuovo prodotto incredibile", availability: 8, price: "44.08", description: "Questo prodotto non esiste (forse) (:", category_id: 1, available: true},
-    {name: "Prodotto modificato", availability: 8, price: "44.08", description: "Anche la descrizione e' stata modificata", category_id: 1, available: true},
-    {name: "pempsi", availability: 99888, price: "22.11", description: "Pempsi", category_id: 1, available: true},
-    {name: "cola", availability: 32, price: "10.5", description: "Non e' coca-cola", category_id: 1, available: true},
-    {name: "doge", availability: 69, price: "0.1", description: "Non vale molto", category_id: 1, available: true},
-    {name: "elon musk", availability: 1, price: "99999.0", description: "Non ha piu' soldi per twitter e si e' messo in vendita", category_id: 2, available: true},
-    {name: "un cane", availability: 10, price: "24.07", description: "Il tuo migliore amico", category_id: 2, available: true},
-    {name: "prodotto bello", availability: 140, price: "66.0", description: "E' bello", category_id: 2, available: true},
-    {name: "tastiera meccanica", availability: 0, price: "10000.0", description: "Costa troppo ma qualcuno la compra di sicuro", category_id: 1, available: true},
-    {name: "ennesimo prodotto", availability: 10, price: "25.08", description: "Uffa", category_id: 1, available: true},
-    {name: "prodotto2", availability: 2286, price: "1.08", description: "Un prodotto importante", category_id: 2, available: true},
-    {name: "prodotto3", availability: 13, price: "5.08", description: "Un prodotto importante", category_id: 1, available: true},
-    {name: "prodotto4", availability: 0, price: "25.08", description: "Un prodotto importante", category_id: 1, available: true}
+    {name: "Broccoli", availability: 10, price: "1.48", description: "Cavolo broccolo, prodotto filmato da 500g. Conservare in luogo fresco e asciutto.", category_id: 3, available: true},
+    {name: "Star il mio brodo di verdure", availability: 0, price: "2.05", description: "Star Il Mio Brodo di Verdure, 1000mlProdotto imballato e provvisto di confezione originale. Articolo nuovo ed imballato.", category_id: 3, available: true},
+    {name: "Riso Scotti Risotto Porcino di Stagione", availability: 8, price: "1.69", description: "RISOTTO PORCINO DI STAGIONE: Per te, un risotto che rispetta la tradizione culinaria italiana portata in una ricetta resa ancora più preziosa dalla straordinaria qualità del nostro riso CarnaroliI prodotti Riso Scotti ti accompagnano con Gusto e Benessere in ogni momento della giornata. Con la stessa attenzione con cui tu scegli prodotti sani, noi ci impegniamo a offrirti la miglior qualità per un’alimentazione equilibrata.", category_id: 3, available: true},
+    {name: "Abito Estivo da Donna", availability: 8, price: "44.08", description: "Cute Sun Dress: la vestibilità e il design svasato permettono di fluire bene in modo che nasconda bene i fianchi e la pancia bene.
+    Stile: senza maniche, doppie cinghie regolabili in staphetti, due tasche laterali, stampa floreale, lunghezza al ginocchio, stile casual, comodo mini abito estivo a trapezio.", category_id: 2, available: true},
+    {name: "T-Shirt da Uomo", availability: 99888, price: "22.11", description: "Comfort senza etichette", category_id: 2, available: true},
+    {name: "HGDGears Plain Baseball cap", availability: 32, price: "10.5", description: "100% cotone di alta qualità", category_id: 2, available: true},
+    {name: "Sciarpa - 100% lino", availability: 69, price: "39.97", description: "Sciarpa per donna, 100% lino", category_id: 2, available: true},
+    {name: "Invernale Sciarpa Scialle Pashmina", availability: 18, price: "99.0", description: "La sciarpa da donna è realizzata dai materiali selezionati, 30% in cotone e 70% in poliestere, morbida al tatto, super comoda e calda, resiste al freddo intenso, ti accompagna a trascorrere il freddo inverno.", category_id: 2, available: true},
+    {name: "Collana Donna Cuore in Argento", availability: 10, price: "24.07", description: "solo una collana", category_id: 5, available: true},
+    {name: "Placcati platino in argento Sterling", availability: 140, price: "66.0", description: "Anello placcato platino", category_id: 5, available: true},
+    {name: "The Big Bang Theory, La Serie Completa", availability: 500, price: "40.0", description: "The Big Bang Theory, La Serie Completa", category_id: 4, available: true},
+    {name: "Sex And The City - La Serie Completa", availability: 10, price: "25.08", description: "Sex And The City - La Serie Completa", category_id: 4, available: true},
+    {name: "Trono di Spade Stagioni 1-8", availability: 2286, price: "53.08", description: "Trono di Spade Stagioni 1-8", category_id: 4, available: true},
+    {name: "MAXFIT61 Tastiera meccanica", availability: 13, price: "39.08", description: "MAXFIT61 Tastiera meccanica cablata RGB al 60%, 61 tasti Tastiera da gioco programmabile di tipo C sostituibile a caldo, interruttore blu Outemu, bianco", category_id: 1, available: true},
+    {name: "Cooler Master CK352 Tastiera Gaming Meccanica (Layout IT) ", availability: 20, price: "45.52", description: "Cooler Master CK352 Tastiera Gaming Meccanica (Layout IT) - Interruttori Rossi, Retroilluminazione RGB per Tasto e Barre luminose - Formato Completo, Cablato, Keycaps Personalizzabili, QWERTY", category_id: 1, available: true},
+    {name: "Coolerplus FC112 USB Optical Wired Mouse  ", availability: 20, price: "11.99", description: "Coolerplus FC112 USB Optical Wired Mouse con facile clic per ufficio e casa, 1000DPI, Premium e portatile, compatibile con Windows PC, Laptop, Desktop, Notebook(nero)", category_id: 1, available: true}
 ])
+
+Product.all.each{ |p|
+  s = 'product' + p[:id].to_s + '.jpg'
+  file = './db/product/' + s
+  p.images.attach(io: File.open(file), filename:s )
+}
+
 Review.create!([
     {stars: 3, comments: "Commento modificato", product_id: 1, user_id: 1},
     {stars: 5, comments: "cringe", product_id: 1, user_id: 2}
