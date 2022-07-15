@@ -36,13 +36,23 @@ class OrdersController < ApplicationController
 			order = Order.find_by(id: params[:id], user_id: current_user.id)
 		end 
         if order
-			render json: { data: {
-				:id => params[:id],
-				:shipping_status => Order.shipping_statuses[order[:shipping_status]],
-				:payment_status => Order.payment_statuses[order[:payment_status]],
-				:items => full_order(order),
-				:receipt_url => ""
-			}}, shipping_status: :ok
+			render json: {
+					data: {
+					:id => params[:id],
+					:shipping_status => Order.shipping_statuses[order[:shipping_status]],
+					:payment_status => Order.payment_statuses[order[:payment_status]],
+					:items => full_order(order),
+					:receipt_url => order[:receipt_url],
+					address: {
+						:name => order[:name],
+						:city => order[:city],
+						:country => order[:country],
+						:line1 => order[:line1],
+						:line2 => order[:line2],
+						:postal_code => order[:postal_code]
+					}
+				}
+			}, shipping_status: :ok
         else
             render json: { message: "Order #{params[:id]} for user #{current_user.email} not found." }, shipping_status: :not_found
         end

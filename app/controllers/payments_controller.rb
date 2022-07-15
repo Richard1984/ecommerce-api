@@ -13,24 +13,14 @@ class PaymentsController < ApplicationController
                 :quantity => p[:quantity]
 			}
 		}
-        # Amount is the sum of all the products in the cart
-        amount = user_cart.map { |p| p[:product][:price] * p[:quantity] }.sum
-        # Create a PaymentIntent with amount and currency
-        payment_intent = Stripe::PaymentIntent.create(
-            amount: (amount*100).to_i,
-            currency: 'eur',
-            automatic_payment_methods: {
-            enabled: true,
-            },
-        )
 
         # Create order with products in cart
 		order = Order.new(
             user_id: current_user.id,
-            payment_intent_id: payment_intent.id,
-            payment_status: :not_paid,
-            shipping_status: :not_shipped
+            payment_status: :paid_not,
+            shipping_status: :shipped_not
         )
+        # Save the order
 		Order.transaction do
             order.save!
             OrderProduct.transaction do
@@ -47,6 +37,21 @@ class PaymentsController < ApplicationController
                 end
 			end
         end
+
+        # Amount is the sum of all the products in the cart
+        amount = user_cart.map { |p| p[:product][:price] * p[:quantity] }.sum
+        # Create a PaymentIntent with amount and currency
+        payment_intent = Stripe::PaymentIntent.create(
+            amount: (amount*100).to_i,
+            currency: 'eur',
+            automatic_payment_methods: {
+                enabled: true,
+            },
+            metadata: {
+                user_id: current_user.id,
+                order_id: order.id
+            }
+        )
         render json: { client_secret: payment_intent['client_secret'], cart: user_cart, order_id: order[:id] }, status: :ok
     end
 
@@ -54,7 +59,7 @@ class PaymentsController < ApplicationController
         # Update payment state
 		Order.transaction do
             # Get the order
-            order = Order.where(user_id: current_user.id, id: params[:order_id], payment_status: :not_paid).first
+            order = Order.where(user_id: current_user.id, id: params[:order_id], payment_status: :paid_not).first
             if order
                 # Change the payment state
                 order.update_columns(payment_status: :paid_client)
@@ -64,40 +69,69 @@ class PaymentsController < ApplicationController
                 order = Order.where(user_id: current_user.id, id: params[:order_id]).first
                 if order
                     # The order is already paid_client or paid
-                    render json: { message: "Already confirmed" }, status: :ok
+                    render json: { message: "Already done" }, status: :ok
                 else
                     render json: { message: "Order not found" }, status: :not_acceptable
                 end
             end
             render json: { message: "Order not found" }, status: :ok
         end
+        # Empty the cart
+        Cart.where(user_id: current_user.id).destroy_all
     end
 
 
-    # def success_webhook
-    #     # Verify the event by fetching it from Stripe
-    #     event = Stripe::Webhook.construct_event(
-    #         request.body.read,
-    #         request.headers['stripe-signature'],
-    #         Rails.application.credentials.stripe_webhook_secret
-    #     )
-    #     # Handle the event
-    #     case event['type']
-    #     when 'payment_intent.succeeded'
-    #         # The payment was successful, so update the cart
-    #         user_id = event['data']['object']['metadata']['user_id']
-    #         user_cart = Cart.where(user_id: user_id, filled:false)
-    #         user_cart.each do |product|
-    #             product.update_columns(filled:true)
-    #         end
-    #     when 'payment_intent.payment_failed'
-    #         # The payment failed, so update the cart
-    #         user_id = event['data']['object']['metadata']['user_id']
-    #         user_cart = Cart.where(user_id: user_id, filled:false)
-    #         user_cart.each do |product|
-    #             product.update_columns(filled:false)
-    #         end
-    #     end
-    #     render json: { message: "Webhook received." }
-    # end
+    def success_webhook
+        # Verify the event by fetching it from Stripe
+        event = Stripe::Webhook.construct_event(
+            request.body.read,
+            request.headers['stripe-signature'],
+            Rails.application.credentials.stripe_webhook_secret
+        )
+        # Handle the event
+        case event['type']
+        when 'payment_intent.succeeded'
+            # The payment was successful, so update the cart
+            user_id = event['data']['object']['metadata']['user_id']
+            order_id = event['data']['object']['metadata']['order_id']
+            payment_intent_id = event['data']['object']['id']
+            receipt_url = event['data']['object']['charges']['data'][0]['receipt_url']
+            shipping = event['data']['object']['charges']['data'][0]['shipping']
+            name = shipping['name']
+            city = shipping['address']['city']
+            country = shipping['address']['country']
+            line1 = shipping['address']['line1']
+            line2 = shipping['address']['line2']
+            postal_code = shipping['address']['postal_code']
+            Order.transaction do
+                order = Order.where(user_id: user_id, id: order_id).first
+                if order
+                    order.update_columns(
+                        payment_status: :paid,
+                        payment_intent_id: payment_intent_id,
+                        receipt_url: receipt_url,
+                        name: name,
+                        city: city,
+                        country: country,
+                        line1: line1,
+                        line2: line2,
+                        postal_code: postal_code
+                    )
+                    order.save!
+                end
+            end
+        when 'payment_intent.payment_failed'
+            # The payment failed, so update the cart
+            user_id = event['data']['object']['metadata']['user_id']
+            order_id = event['data']['object']['metadata']['order_id']
+            Order.transaction do
+                order = Order.where(user_id: user_id, id: order_id).first
+                if order
+                    order.update_columns(payment_status: :failed, payment_intent_id: event['data']['object']['id'])
+                    order.save!
+                end
+            end
+        end
+        render json: { message: "Webhook received." }
+    end
 end
