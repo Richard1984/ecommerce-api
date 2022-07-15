@@ -11,9 +11,7 @@ class ProductsController < ApplicationController
 		images = []
 		if @product.images.attached?
 			@product.images.each do |image|
-				image_json = JSON.parse(image.to_json)
-				image_json[:url] = url_for(image)
-				images.push(image_json)
+				images.push(url_for(image))
 			end
 		end
 		product_json = JSON.parse(@product.to_json)
@@ -135,6 +133,20 @@ class ProductsController < ApplicationController
 		else
 			@products = @products.order(sorting_criteria => sorting_order) 
 		end
-        return @products
+		prods = Array.new
+	
+		@products.each{ |product|
+			images =[]
+			if product.images.attached?
+				product.images.each do |image|
+					images.push(url_for(image))
+				end
+				product_json = JSON.parse(product.to_json)
+				product_json[:images] =  images
+				prods << product_json
+			end
+
+		}
+        return prods
     end
 end
