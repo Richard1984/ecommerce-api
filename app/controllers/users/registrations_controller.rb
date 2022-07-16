@@ -11,7 +11,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         email: resource.email
       )
       resource.update_columns(stripe_customer: customer[:id])
-      render json: { message: 'Signed up.' }, status: :ok
+      render json: { data: @user, message: 'Signed up.' }, status: :ok
     else
       render json: { message: "Could not sign up", data: resource.errors }, status: :bad_request
     end
