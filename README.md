@@ -5,7 +5,7 @@ Install the dependencies:
 ``` bash
 bundle install
 rake db:migrate
-rake db:seed
+rake db:all_seed
 bin/rails s
 ```
 
