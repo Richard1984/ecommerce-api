@@ -49,9 +49,13 @@ class User < ApplicationRecord
     avatar = URI.parse(profile['picture']['data']['url']).open
     user.avatar.attach(io: avatar, filename: "avatar.jpg")
 
+    user_json = JSON.parse(user.to_json)
+		user_json[:avatar] = url_for(user.avatar)
+		user_json[:roles] = current_user.roles
+
     token = user.generate_jwt
 
-    { 'user' => user, 'token' => token }
+    { 'user' => user_json, 'token' => token }
   end
 
   def generate_jwt
