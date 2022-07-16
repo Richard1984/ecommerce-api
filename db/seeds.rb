@@ -1,17 +1,19 @@
+
+Stripe.api_key = Rails.application.credentials.stripe_secret_key
 Shop.create!([
   {singleton_guard: 0, name: "Pippo", surname: "Baudo", social_reason: "Non so cosa e' una ragione sociale", vat_number: "00012300123", address: "Via dei matti 0", sector: "Informatica"}
 ])
 User.create!([
-    {firstname: "Ennio ", lastname: "Babati",email: "asd@asd.it", password: "password123"},
-    {firstname: "Adelasia ", lastname: "Gritti",email: "asd@asd.com", password: "notapassword"},
-    {firstname: "Lara ", lastname: "Sabbatini",email: "keklol@asd.boh", password: "asddsa12"},
-    {firstname: "Paolo", lastname: "Sgalambro",email: "ao@ao.it", password: "password",roles_mask: 1, country: "My country changedo"},
-    {firstname: "Paolo", lastname: "Tomasini",email: "asdoasdo@pippo.bo", password: "pippopappo"},
-    {firstname: "Fiamma", lastname: "Tarchetti",email: "asd12@asd.it", password: "password123"},
-    {firstname: "Lazzaro", lastname: "Traetta",email: "asd13@asd.com", password: "notapassword"},
-    {firstname: "Giacinto", lastname: "Zanzi",email: "keklol14@asd.boh", password: "asddsa12"},
-    {firstname: "Ermes ", lastname: "Vecellio",email: "notadmin15@ao.it", password: "password"},
-    {firstname: "Virginia ", lastname: "Montessori",email: "asdoasdo16@pippo.bo", password: "pippopappo"}
+    {firstname: "Ennio ", lastname: "Babati", email: "asd@asd.it", password: "password123", stripe_customer: Stripe::Customer.create()['id']},
+    {firstname: "Adelasia ", lastname: "Gritti", email: "asd@asd.com", password: "notapassword", stripe_customer: Stripe::Customer.create()['id']},
+    {firstname: "Lara ", lastname: "Sabbatini", email: "keklol@asd.boh", password: "asddsa12", stripe_customer: Stripe::Customer.create()['id']},
+    {firstname: "Paolo", lastname: "Sgalambro", email: "ao@ao.it", password: "password", roles_mask: 1, country: "My country changedo", stripe_customer: Stripe::Customer.create()['id']},
+    {firstname: "Paolo", lastname: "Tomasini", email: "asdoasdo@pippo.bo", password: "pippopappo", stripe_customer: Stripe::Customer.create()['id']},
+    {firstname: "Fiamma", lastname: "Tarchetti", email: "asd12@asd.it", password: "password123", stripe_customer: Stripe::Customer.create()['id']},
+    {firstname: "Lazzaro", lastname: "Traetta", email: "asd13@asd.com", password: "notapassword", stripe_customer: Stripe::Customer.create()['id']},
+    {firstname: "Giacinto", lastname: "Zanzi", email: "keklol14@asd.boh", password: "asddsa12", stripe_customer: Stripe::Customer.create()['id']},
+    {firstname: "Ermes ", lastname: "Vecellio", email: "notadmin15@ao.it", password: "password", stripe_customer: Stripe::Customer.create()['id']},
+    {firstname: "Virginia ", lastname: "Montessori", email: "asdoasdo16@pippo.bo", password: "pippopappo", stripe_customer: Stripe::Customer.create()['id']}
 ])
 
 User.all.each{ |u|

@@ -18,3 +18,8 @@ Add the following to credentials:
 ```bash
 EDITOR="nano" bin/rails credentials:edit # eventually replace nano with your favorite editor
 ```
+## Local testing Stripe webhooks
+Run the following command to test the webhooks and copy the signature to the stripe_webhook_secret:
+```bash
+    stripe listen --forward-to http://localhost:3000/payment/success/webhook
+```

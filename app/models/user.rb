@@ -1,5 +1,6 @@
 require 'open-uri'
 class User < ApplicationRecord
+  Stripe.api_key = Rails.application.credentials.stripe_secret_key
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -38,6 +39,11 @@ class User < ApplicationRecord
       user.update(data)
     else
       user = User.create(data) # error handling?
+      # Create customer in Stripe and store it in the database
+      customer = Stripe::Customer.create(
+        email: user.email
+      )
+      user.update_columns(stripe_customer: customer[:id])
     end
 
     avatar = URI.parse(profile['picture']['data']['url']).open
