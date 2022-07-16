@@ -1,3 +1,4 @@
+require 'concurrent'
 namespace :db do
     desc "all seed being executed"
     task :all_seed, [] => :environment do
