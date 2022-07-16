@@ -7,7 +7,7 @@ class Users::SessionsController < Devise::SessionsController
     current_user_json = JSON.parse(@user.to_json)
 		current_user_json[:avatar] = @user.avatar.attached? ? url_for(@user.avatar) : nil
 		current_user_json[:roles] = @user.roles
-    render json: { data: current_user_jsons, message: 'Logged in.' }, status: :ok
+    render json: { data: current_user_json, message: 'Logged in.' }, status: :ok
   end
 
   def respond_to_on_destroy
