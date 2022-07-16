@@ -46,7 +46,7 @@ Product.create!([
     {name: "Trono di Spade Stagioni 1-8", availability: 2286, price: "53.08", description: "Trono di Spade Stagioni 1-8", category_id: 4, available: true},
     {name: "MAXFIT61 Tastiera meccanica", availability: 13, price: "39.08", description: "MAXFIT61 Tastiera meccanica cablata RGB al 60%, 61 tasti Tastiera da gioco programmabile di tipo C sostituibile a caldo, interruttore blu Outemu, bianco", category_id: 1, available: true},
     {name: "Cooler Master CK352 Tastiera Gaming Meccanica (Layout IT) ", availability: 20, price: "45.52", description: "Cooler Master CK352 Tastiera Gaming Meccanica (Layout IT) - Interruttori Rossi, Retroilluminazione RGB per Tasto e Barre luminose - Formato Completo, Cablato, Keycaps Personalizzabili, QWERTY", category_id: 1, available: true},
-    {name: "Coolerplus FC112 USB Optical Wired Mouse  ", availability: 20, price: "11.99", description: "Coolerplus FC112 USB Optical Wired Mouse con facile clic per ufficio e casa, 1000DPI, Premium e portatile, compatibile con Windows PC, Laptop, Desktop, Notebook(nero)", category_id: 1, available: true}
+    {name: "Coolerplus FC112 USB Optical Wired Mouse  ", availability: 200, price: "11.99", description: "Coolerplus FC112 USB Optical Wired Mouse con facile clic per ufficio e casa, 1000DPI, Premium e portatile, compatibile con Windows PC, Laptop, Desktop, Notebook(nero)", category_id: 1, available: true}
 ])
 
 Product.all.each{ |p|
@@ -55,29 +55,88 @@ Product.all.each{ |p|
   p.images.attach(io: File.open(file), filename:s )
 }
 
+r = Random.new
 Review.create!([
-    {stars: 3, comments: "Commento modificato", product_id: 1, user_id: 1},
-    {stars: 5, comments: "cringe", product_id: 1, user_id: 2}
+    {stars:3, comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 1, user_id: 1},
+    {stars: r.rand(1..5), comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 1, user_id: 2},
+    
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 2, user_id: 1},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 2, user_id: 4},
+    {stars: r.rand(1..5), comments: "printing and typesetting industry.", product_id: 2, user_id: 3},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum  when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 2, user_id: 5},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 3, user_id: 1},
+    {stars: r.rand(1..5), comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 3, user_id: 3},
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 3, user_id: 6},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 3, user_id: 8},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 4, user_id: 1},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 4, user_id: 6},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 5, user_id: 3},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 5, user_id: 7},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 6, user_id: 1},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 6, user_id: 1},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id:7, user_id: 5},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 7, user_id: 1},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 8, user_id: 1},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 8, user_id: 2},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 9, user_id: 4},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 9, user_id: 4},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 10, user_id: 1},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 10, user_id: 5},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 11, user_id: 7},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 11, user_id: 3},
+
+    {stars: r.rand(1..5), comments: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", product_id: 12, user_id: 1},
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 12, user_id: 1},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 12, user_id: 2},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 13, user_id: 3},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id:13, user_id: 7},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 14, user_id: 2},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 14, user_id: 6},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 15, user_id: 1},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 15, user_id: 6},
+
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 16, user_id: 5},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 16, user_id: 2}
 ])
+
+
+
 Vote.create!([
   {likes: false, review_id: 1, user_id: 3}
 ])
+
+
+
+
+
 Order.create!([
-    {user_id: 1},
-    {user_id: 1},
-    {user_id: 4},
-    {user_id: 4},
-    {user_id: 5},
+    {user_id: 1}, 
+    {user_id: 1}, 
+    {user_id: 4}, 
+    {user_id: 4}, 
+    {user_id: 5}, 
     {user_id: 5}
 ])
 OrderProduct.create!([
-  {order_id: 1, product_id: 10, quantity: 10},
-  {order_id: 1, product_id: 13, quantity: 1},
-  {order_id: 2, product_id: 5, quantity: 10},
+  {order_id: 1, product_id: 10, quantity: 10}, 
+  {order_id: 1, product_id: 13, quantity: 1}, 
+  {order_id: 2, product_id: 5, quantity: 100}, 
   {order_id: 2, product_id: 1, quantity: 1},
   {order_id: 3, product_id: 6, quantity: 10},
   {order_id: 3, product_id: 7, quantity: 1},
-  {order_id: 4, product_id: 6, quantity: 2},
+  {order_id: 4, product_id: 16, quantity: 150},
   {order_id: 4, product_id: 5, quantity: 7},
   {order_id: 5, product_id: 6, quantity: 2},
   {order_id: 5, product_id: 13, quantity: 7},
