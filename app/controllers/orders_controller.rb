@@ -126,8 +126,16 @@ private
 
 def full_order(order)
 	order.products.map{ |p|
+		# Get the product
+		product = Product.where(id:p[:id]).first
+		product_json = JSON.parse(product.to_json)
+		product_json[:images] = []
+		# Get the first image of the product and push to images array
+		if product.images.attached?
+			product_json[:images].push(url_for(product.images.first))
+		end
 		{
-			:product => p,
+			:product => product_json,
 			:quantity => OrderProduct.find_by(product_id: p[:id],order_id:order[:id])[:quantity]
 		}
 	}

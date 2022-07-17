@@ -21,8 +21,17 @@ class CartsController < ApplicationController
         else
             products = Cart.where(user_id: current_user.id)
             user_cart = products.map { |p|
-                { 
-                    :product => Product.where(id:p[:product_id]).first,
+                # Get the product
+                product = Product.where(id:p[:product_id]).first
+				product_json = JSON.parse(product.to_json)
+                product_json[:images] = []
+                # Get the first image of the product and push to images array
+			    if product.images.attached?
+                    product_json[:images].push(url_for(product.images.first))
+                end
+                # Return the product with the quantity
+                {
+                    :product => product_json,
                     :quantity => p[:quantity]
                 }
             }	
