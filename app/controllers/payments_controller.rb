@@ -97,7 +97,8 @@ class PaymentsController < ApplicationController
         event = Stripe::Webhook.construct_event(
             request.body.read,
             request.headers['stripe-signature'],
-            Rails.application.credentials.stripe_webhook_secret
+            # if development, use stripe_webhook_secret instead of stripe_webhook_production_secret
+            Rails.env.production? ? Rails.application.credentials.stripe_webhook_production_secret : Rails.application.credentials.stripe_webhook_secret
         )
         # Handle the event
         case event['type']
