@@ -2,8 +2,10 @@ User.all.each{ |u|
   s = 'user' + u[:id].to_s + '.png'
   file = './db/user/' + s
   begin
-    u.avatar.attach(io: File.open(file), filename:s )
-    puts "img prod done "+ s
+    if !u.avatar.attached?
+      u.avatar.attach(io: File.open(file), filename:s )
+      puts "img prod done "+ s
+    end
   rescue => e
     puts e
   end
