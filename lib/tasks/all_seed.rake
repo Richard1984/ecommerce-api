@@ -1,9 +1,7 @@
 require 'concurrent'
 namespace :db do
     desc "all seed being executed"
-    task :all_seed, [] => :environment do
-      raise "Not allowed to run on production" if Rails.env.production?
-  
+    task :all_seed, [] => :environment do  
       Rake::Task['db:seed'].execute
       Rake::Task['db:seed:review'].execute
       Rake::Task['db:seed:users_image'].execute
