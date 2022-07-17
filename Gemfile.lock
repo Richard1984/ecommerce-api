@@ -151,6 +151,7 @@ GEM
     minitest (5.16.1)
     msgpack (1.5.2)
     multipart-post (2.2.3)
+    mysql2 (0.5.4)
     net-imap (0.2.3)
       digest
       net-protocol
@@ -220,7 +221,6 @@ GEM
     ruby-graphviz (1.2.5)
       rexml
     ruby2_keywords (0.0.5)
-    sqlite3 (1.4.4)
     stripe (6.5.0)
     strscan (3.0.3)
     thor (1.2.1)
@@ -250,11 +250,11 @@ DEPENDENCIES
   devise-jwt
   dry-configurable (= 0.13.0)
   koala
+  mysql2
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.3)
   rails-erd
-  sqlite3 (~> 1.4)
   stripe
   tzinfo-data
 
