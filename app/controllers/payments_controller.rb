@@ -24,14 +24,14 @@ class PaymentsController < ApplicationController
 		Order.transaction do
             order.save!
             OrderProduct.transaction do
-                products.each do |p|
-                    prod = Product.find_by(id: p[:product_id])
+                user_cart.each do |p|
+                    prod = Product.find_by(id: p[:product][:id])
                     # av = prod[:availability] - p[:quantity]
                     # if av<0
                     #     raise StandardError.new("Not enough products")
                     # else 
                     #     prod.update_columns(availability:av)
-                    op = OrderProduct.new(order_id: order[:id],product_id: p[:product_id],quantity: p[:quantity])
+                    op = OrderProduct.new(order_id: order[:id],product_id: p[:product][:id], quantity: p[:quantity])
                     op.save!
                     # end
                 end
@@ -42,28 +42,39 @@ class PaymentsController < ApplicationController
         amount = user_cart.map { |p| p[:product][:price] * p[:quantity] }.sum
         # Create a PaymentIntent with amount and currency
         payment_intent = Stripe::PaymentIntent.create(
-            customer: current_user[:stripe_customer],
             amount: (amount*100).to_i,
             currency: 'eur',
-            setup_future_usage: 'off_session',
-            automatic_payment_methods: {
-                enabled: true,
-            },
+            setup_future_usage: 'on_session',
             metadata: {
                 user_id: current_user.id,
                 order_id: order.id
-            }
+            },
+            payment_method_types: ['card'] # We only accept cards
         )
         payment_methods = Stripe::Customer.list_payment_methods(
             current_user[:stripe_customer],
             {type: 'card'},
         )
         render json: {
-            client_secret: payment_intent['client_secret'],
-            cart: user_cart,
-            order_id: order[:id],
-            payment_methods: payment_methods['data']
+            data: {
+                payment_intent_id: payment_intent[:id],
+                client_secret: payment_intent[:client_secret],
+                cart: user_cart,
+                order_id: order[:id],
+                payment_methods: payment_methods[:data]
+            }
         }, status: :ok
+    end
+    
+
+    def save_payment_method
+        if params[:save_payment_method] == "false"
+            # Change PaymentIntent to not save payment method
+            # params[:payment_intent_id]
+        else
+            # Change PaymentIntent to save payment method
+            # params[:payment_intent_id]
+        end
     end
 
     def success_client
