@@ -42,6 +42,7 @@ class PaymentsController < ApplicationController
         amount = user_cart.map { |p| p[:product][:price] * p[:quantity] }.sum
         # Create a PaymentIntent with amount and currency
         payment_intent = Stripe::PaymentIntent.create(
+            customer: current_user[:stripe_customer],
             amount: (amount*100).to_i,
             currency: 'eur',
             setup_future_usage: 'on_session',
@@ -51,17 +52,13 @@ class PaymentsController < ApplicationController
             },
             payment_method_types: ['card'] # We only accept cards
         )
-        payment_methods = Stripe::Customer.list_payment_methods(
-            current_user[:stripe_customer],
-            {type: 'card'},
-        )
+        
         render json: {
             data: {
                 payment_intent_id: payment_intent[:id],
                 client_secret: payment_intent[:client_secret],
                 cart: user_cart,
-                order_id: order[:id],
-                payment_methods: payment_methods[:data]
+                order_id: order[:id]
             }
         }, status: :ok
     end
