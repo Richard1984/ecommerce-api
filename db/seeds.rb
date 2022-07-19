@@ -3,7 +3,7 @@ Stripe.api_key = Rails.application.credentials.stripe_secret_key
 puts "Stripe api key created"
 
 [
-  {singleton_guard: 0, name: "Pippo", surname: "Baudo", social_reason: "Non so cosa e' una ragione sociale", vat_number: "00012300123", address: "Via dei matti 0", sector: "Informatica"}
+  {singleton_guard: 0, firstname: "Pippo", firstname: "Baudo", company_name: "Non so cosa e' una ragione sociale", vat_number: "00012300123", address: "Via dei matti 0", sector: "Informatica"}
 ].each do |attributes|
   Shop.find_or_initialize_by(vat_number: attributes[:vat_number]).update!(attributes)
 end
