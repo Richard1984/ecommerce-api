@@ -21,13 +21,13 @@ class PaymentMethodsController < ApplicationController
         }, status: :ok
     end
 
-    def add_payment_method
-        payment_method = Stripe::PaymentMethod.attach(
-            params[:payment_method_id],
-            {customer: current_user[:stripe_customer]},
-        )
+    def setup_new_payment_method
+        setup_intent = Stripe::SetupIntent.create(
+            customer: current_user[:stripe_customer],
+            payment_method_types: ['card'],
+          )
         render json: {
-            data: payment_method
+            data: setup_intent[:client_secret]
         }, status: :ok
     end
 

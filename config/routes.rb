@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     resources :lists
     resource :cart, only: [ :update, :show, :create, :destroy]
     resource :payment_methods, only: [:show] do
-      post "add", to: "payment_methods#add_payment_method"
+      get "new", to: "payment_methods#setup_new_payment_method"
       post "remove", to: "payment_methods#remove_payment_method"
     end
   end
@@ -56,7 +56,7 @@ Rails.application.routes.draw do
   resource :payment, only: [:show, :update] do
     post "success/client", to: "payments#success_client"
     post "success/webhook", to: "payments#success_webhook"
-    post "save_payment_method", to: "payments#save_payment_method"
+    # post "save_payment_method", to: "payments#save_payment_method"
   end
   
 end
