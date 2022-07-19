@@ -7,7 +7,11 @@ class FacebookAuthenticationsController < ApplicationController
     
     if data
       response.headers['Authorization'] = 'Bearer ' + data['token']
-      render json: { data: data['user'] }, status: :ok
+      user = data['user']
+      user_json = JSON.parse(user.to_json)
+      user_json[:avatar] = url_for(user.avatar)
+      user_json[:roles] = user.roles
+      render json: { data: user_json }, status: :ok
     else
       render json: { data: data.errors }, status: :unprocessable_entity
     end

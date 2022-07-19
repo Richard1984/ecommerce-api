@@ -15,7 +15,7 @@ class ProductsController < ApplicationController
 			end
 		end
 		product_json = JSON.parse(@product.to_json)
-		product_json[:category_name] = Category.find(@product.category_id).name
+		product_json[:category_name] = Category.find(@product.category_id).name if @product.category_id
 		product_json[:images] = images
 		product_json[:avg_reviews] = @product.avg_reviews
 		product_json[:reviews_by_stars] = {
