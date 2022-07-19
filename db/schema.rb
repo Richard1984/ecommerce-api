@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_16_001025) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -116,7 +116,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_16_001025) do
     t.bigint "category_id"
     t.boolean "available", default: true
     t.index ["category_id"], name: "index_products_on_category_id"
-    t.index ["name"], name: "index_products_on_name", unique: true
+    t.index ["name"], name: "index_products_on_name"
   end
 
   create_table "reviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -132,9 +132,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_16_001025) do
 
   create_table "shops", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "singleton_guard"
-    t.string "name", default: ""
-    t.string "surname", default: ""
-    t.string "social_reason", default: ""
+    t.string "firstname", default: ""
+    t.string "lastname", default: ""
+    t.string "company_name", default: ""
     t.string "vat_number", default: ""
     t.string "address", default: ""
     t.string "sector", default: ""

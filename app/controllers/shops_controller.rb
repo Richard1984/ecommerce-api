@@ -9,9 +9,9 @@ class ShopsController < ApplicationController
     def update
         authorize! :update, Shop, :message => "BEWARE: you are not authorized to modify shop information."
         if Shop.instance.update(params.require(:shop).permit(
-            :name,
-            :surname,
-            :social_reason,
+            :firstname,
+            :lastname,
+            :company_name,
             :vat_number,
             :address,
             :sector
