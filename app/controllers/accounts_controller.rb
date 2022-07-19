@@ -18,7 +18,10 @@ class AccountsController < ApplicationController
 		# si dovrebbe richiedere la password
 
 		if current_user.update(params.require(:user).permit(:email, :firstname, :lastname, :country)) # non so se accettare la mail qui crea problemi
-			render json: { message: "User information was successfully updated.", data: current_user }, status: :ok
+			current_user_json = JSON.parse(current_user.to_json)
+			current_user_json[:avatar] = user_avatar
+			current_user_json[:roles] = current_user.roles
+			render json: { message: "User information was successfully updated.", data: current_user_json }, status: :ok
 		else
 			render json: { message: "Could not update user information", data: current_user.errors }, status: :not_acceptable
 		end
