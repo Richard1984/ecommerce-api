@@ -1,9 +1,5 @@
 class AccountsController < ApplicationController
 
-	#Non so come farlo funzionare, al momento se non sei autenticato restituisce un user nullo
-    #before_action :authenticate_user!
-	# Potremmo fare una funzione custom che sostituisce authenticate_user!, che manda un json che da' un errore specifico, e il client quando legge quell'errore rimanda l'utente alla pagina di login prima di inviare le richieste
-
 	def show
 		authorize! :read, current_user, :message => "BEWARE: you are not authorized to read account information."
 
@@ -17,7 +13,7 @@ class AccountsController < ApplicationController
 		authorize! :update, current_user, :message => "BEWARE: you are not authorized to modify account information."
 		# si dovrebbe richiedere la password
 
-		if current_user.update(params.require(:user).permit(:email, :firstname, :lastname, :country)) # non so se accettare la mail qui crea problemi
+		if current_user.update(params.require(:user).permit(:email, :firstname, :lastname, :country))
 			current_user_json = JSON.parse(current_user.to_json)
 			current_user_json[:avatar] = user_avatar
 			current_user_json[:roles] = current_user.roles

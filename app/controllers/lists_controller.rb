@@ -18,7 +18,7 @@ class ListsController < ApplicationController
 			products = []
 			list.products.each { |product|
 				product_json = JSON.parse(product.to_json)
-				product_json[:images] = [url_for(product.images.first)] if product.images.attached?
+				product_json[:images] = [{ url: url_for(product.images.first), id: product.images.first.id }] if product.images.attached?
 				products.push(product_json)
 			}
             render json: { data: { list: list, products: products } }, status: :ok
@@ -84,7 +84,6 @@ class ListsController < ApplicationController
 		rescue Exception => e
             render json: { message: "Could not update list", data: e }, status: 500
 		else
-			# da rifare meglio
 			render json: { message: "List updated.", data: { list: list, products: list.products } }, status: :ok
 		end
     end

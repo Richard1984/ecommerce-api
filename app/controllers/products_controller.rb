@@ -11,7 +11,7 @@ class ProductsController < ApplicationController
 		images = []
 		if @product.images.attached?
 			@product.images.each do |image|
-				images.push(url_for(image))
+				images.push({ url: url_for(image), id: image.id })
 			end
 		end
 		product_json = JSON.parse(@product.to_json)
@@ -139,7 +139,7 @@ class ProductsController < ApplicationController
 			images =[]
 			if product.images.attached?
 				product.images.each do |image|
-					images.push(url_for(image))
+					images.push({ url: url_for(image), id: image.id })
 				end
 			end
 			

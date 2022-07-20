@@ -2,7 +2,7 @@ class CartsController < ApplicationController
     def show
         authorize! :read, Cart, :message => "BEWARE: you do not have a cart, since you are not logged in."
         if current_user.has_role? :admin 
-            #forse era meglio mostrare solo gli id degli utenti con un carrello  e poi sare le richieste separatamente
+            # Se utente e' admin mostra il carrello di tutti gli utenti, tenere?
             carts = Cart.group(:user_id)
             users_cart = Array.new
             carts.each{ |c|
@@ -27,7 +27,7 @@ class CartsController < ApplicationController
                 product_json[:images] = []
                 # Get the first image of the product and push to images array
 			    if product.images.attached?
-                    product_json[:images].push(url_for(product.images.first))
+                    product_json[:images].push({ url: url_for(product.images.first), id: product.images.first.id})
                 end
                 # Return the product with the quantity
                 {

@@ -132,7 +132,7 @@ def full_order(order)
 		product_json[:images] = []
 		# Get the first image of the product and push to images array
 		if product.images.attached?
-			product_json[:images].push(url_for(product.images.first))
+			product_json[:images].push({ url: url_for(product.images.first), id: product.images.first.id })
 		end
 		{
 			:product => product_json,

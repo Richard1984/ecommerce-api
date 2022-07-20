@@ -1,5 +1,4 @@
 class ShopsController < ApplicationController
-    # before_action :authenticate_user! #forza autenticazione
 
     def show
         authorize! :read, Shop, :message => "BEWARE: you are not authorized to read shop information."
