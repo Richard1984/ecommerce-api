@@ -19,7 +19,7 @@ class ListsController < ApplicationController
 			list.products.each { |product|
 				product_json = JSON.parse(product.to_json)
 				product_json[:image] = url_for(product.images.first) if product.images.attached?
-				products.push(product)
+				products.push(product_json)
 			}
             render json: { data: { list: list, products: products } }, status: :ok
         else
