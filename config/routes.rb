@@ -30,7 +30,7 @@ Rails.application.routes.draw do
       resource :vote, except: :index
     end
     post "images", to: "products#update_images"
-    delete "images", to: "products#destroy_images"
+    put "images", to: "products#destroy_images"
   end
   resources :categories do
     resources :products, only: [:index]
