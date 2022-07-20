@@ -15,13 +15,7 @@ class ListsController < ApplicationController
 
 		list = List.find_by(id: params[:id], user_id: current_user.id)
         if list
-			products = []
-			list.products.each { |product|
-				product_json = JSON.parse(product.to_json)
-				product_json[:images] = [{ url: url_for(product.images.first), id: product.images.first.id }] if product.images.attached?
-				products.push(product_json)
-			}
-            render json: { data: { list: list, products: products } }, status: :ok
+            render json: { data: { list: list, products: get_products(list) } }, status: :ok
         else
             render json: { message: "List #{params[:id]} for user #{current_user.email} not found." }, status: :not_found
         end
@@ -53,7 +47,7 @@ class ListsController < ApplicationController
 		rescue Exception => e
             render json: { message: "Could not create list", data: e }, status: 500
 		else
-			render json: { message: "List created.", data: { list: list, products: list.products } }, status: :ok
+			render json: { message: "List created.", data: { list: list, products: get_products(list) } }, status: :ok
 		end
 	end
 
@@ -84,7 +78,7 @@ class ListsController < ApplicationController
 		rescue Exception => e
             render json: { message: "Could not update list", data: e }, status: 500
 		else
-			render json: { message: "List updated.", data: { list: list, products: list.products } }, status: :ok
+			render json: { message: "List updated.", data: { list: list, products: get_products(list) } }, status: :ok
 		end
     end
 
@@ -107,4 +101,16 @@ class ListsController < ApplicationController
 			render json: { message: "List deleted." }, status: :ok
 		end
     end
+
+	private
+
+	def get_products(list)
+		products = []
+		list.products.each { |product|
+			product_json = JSON.parse(product.to_json)
+			product_json[:images] = [{ url: url_for(product.images.first), id: product.images.first.id }] if product.images.attached?
+			products.push(product_json)
+		}
+		return products
+	end
 end
