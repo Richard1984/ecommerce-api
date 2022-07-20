@@ -15,7 +15,13 @@ class ListsController < ApplicationController
 
 		list = List.find_by(id: params[:id], user_id: current_user.id)
         if list
-            render json: { data: { list: list, products: list.products } }, status: :ok
+			products = []
+			list.products.each { |product|
+				product_json = JSON.parse(product.to_json)
+				product_json[:image] = url_for(product.images.first) if product.images.attached?
+				products.push(product)
+			}
+            render json: { data: { list: list, products: products } }, status: :ok
         else
             render json: { message: "List #{params[:id]} for user #{current_user.email} not found." }, status: :not_found
         end

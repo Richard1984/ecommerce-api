@@ -141,10 +141,11 @@ class ProductsController < ApplicationController
 				product.images.each do |image|
 					images.push(url_for(image))
 				end
-				product_json = JSON.parse(product.to_json)
-				product_json[:images] =  images
-				prods << product_json
 			end
+			
+			product_json = JSON.parse(product.to_json)
+			product_json[:images] =  images
+			prods << product_json
 
 		}
         return prods
