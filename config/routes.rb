@@ -45,6 +45,9 @@ Rails.application.routes.draw do
     resources :orders, only: [:show, :create, :index] do
       put "update_shipping", to: "orders#update_shipping"
     end
+    resource :orders, only: [] do 
+      post "search", to: "orders#search"
+    end
     resources :lists
     resource :cart, only: [ :update, :show, :create, :destroy]
     resource :payment_methods, only: [:show] do

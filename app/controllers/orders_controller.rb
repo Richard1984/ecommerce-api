@@ -59,35 +59,61 @@ class OrdersController < ApplicationController
 	end
 	
 	
-	# def create
-	# 	authorize! :create, Order, :message => "BEWARE: you are not authorized to create orders."
+	def search
+		authorize! :read, Order, :message => "BEWARE: you are not authorized to read orders."
+		# Search for orders of current user by id or by product name in the order
+		all_orders = Order.where(user_id: current_user.id, payment_status: [:paid, :paid_client])
+		if params[:search] != ""
+			# If string starts with a #, remove it and search for order id
+			if params[:search][0] == "#"
+				params[:search] = params[:search][1..-1]
+			end
+			# Search for order id
+			orders = all_orders.where(id: params[:search])
+			# If no order id found, search for product name
+			if !orders.empty?
+				orders = orders.map { |o|
+					{
+						:id => o[:id],
+						:shipping_status => Order.shipping_statuses[o[:shipping_status]],
+						:payment_status => Order.payment_statuses[o[:payment_status]],
+						:items => full_order(o)
+					}
+				}
+			else
+				orders = []
+				all_orders.each do |o|
+					puts "Searching in order #{o[:id]}"
+					# For each order, get the items and search for the product name
+					items = full_order(o)
+					# If product name found, add the order to the list
+					items.each do |item|
+						if item[:product]["name"].downcase.include? params[:search].downcase
+							# Add the order to the list
+							orders << {
+								:id => o[:id],
+								:shipping_status => Order.shipping_statuses[o[:shipping_status]],
+								:payment_status => Order.payment_statuses[o[:payment_status]],
+								:items => items
+							}
+							break
+						end
+					end					
+				end
+			end
+		else
+			orders = all_orders.map { |o|
+				{
+					:id => o[:id],
+					:shipping_status => Order.shipping_statuses[o[:shipping_status]],
+					:payment_status => Order.payment_statuses[o[:payment_status]],
+					:items => full_order(o)
+				}
+			}
+		end
+		render json: { data: orders}, status: :ok
+	end
 
-	# 	products = params[:products]
-	# 	order = Order.new(user_id: current_user.id)
-	# 	begin
-	# 		Order.transaction do
-	# 			order.save!
-	# 			OrderProduct.transaction do
-	# 				products.each do |p|
-	# 					prod = Product.find_by(id:p[:id])
-	# 					av = prod[:availability] - p[:quantity]
-	# 					if av<0
-	# 						raise StandardError.new("Not enough products")
-	# 					else
-	# 						prod.update_columns(availability:av)
-	# 						op = OrderProduct.new(order_id:order[:id],product_id:p[:id],quantity:p[:quantity])
-	# 						op.save!
-	# 					end
-	# 				end
-	# 			end
-	# 		end
-	# 	rescue Exception => e
-    #         render json: { message: "Could not generate order", data: e }, shipping_status: 500
-	# 	else
-	# 		# Forse e' meglio passare tutto l'ordine e gli order_products
-	# 		render json: { message: "Order added.", data: order }, shipping_status: :ok
-	# 	end
-	# end
 
 
 	def update_shipping
