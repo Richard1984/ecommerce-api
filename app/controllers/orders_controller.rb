@@ -92,33 +92,43 @@ class OrdersController < ApplicationController
 
 	def update_shipping
 		authorize! :update, Order, :message => "BEWARE: you are not authorized to modify orders."
-		case params[:op]
-        when "next"
-			order = Order.find_by(user_id: params[:id])
-            if order
-				shipping_status = order[:shipping_status] + 1
-				if order.update_columns(shipping_status:shipping_status)
-					render json: { message: "Shipping status correctly updated", data: order }, shipping_status: :ok
-				else
-					render json: { message: "Could not update the shipping status", data: order.errors }, shipping_status: :not_acceptable
-				end
+		order = Order.find(params[:id])
+		if !order
+			render json: {
+				message: "Order #{params[:id]} not found.",
+				data: order[:shipping_status],
+			}, status: :not_acceptable
+		else
+			if params[:op] == "next"
+				shipping_status = Order.shipping_statuses[order[:shipping_status]] + 1
+			elsif params[:op] == "previous"
+				shipping_status = Order.shipping_statuses[order[:shipping_status]] - 1
 			else
-				render json: { message:"Order #{params[:id]} for user #{current_user.email} not found.", data: order.errors }, shipping_status: :not_acceptable
+				render json: {
+					message: "Update operation not supported.",
+					data: order[:shipping_status],
+				}, status: :not_acceptable
 			end
-		when "previous"
-			order = Order.find_by(user_id:params[:id])
-            if order
-				shipping_status = order[:shipping_status] - 1
-				if order.update_columns(shipping_status:shipping_status)
-					render json: { message: "Shipping status correctly updated", data: order }, shipping_status: :ok
-				else
-					render json: { message: "Could not update the shipping status", data: order.errors }, shipping_status: :not_acceptable
-				end
+
+			if shipping_status < 0 || shipping_status > Order.shipping_statuses.length
+				render json: {
+					message: "Shipping status #{shipping_status} not valid.",
+					data: order[:shipping_status],
+				}, status: :not_acceptable
 			else
-				render json: { message:"Order #{params[:id]} for user #{current_user.email} not found.", data: order.errors }, shipping_status: :not_acceptable
+				if order.update_columns(shipping_status: Order.shipping_statuses.key(shipping_status))
+					render json: {
+						message: "Shipping status correctly updated",
+						data: shipping_status,
+					}, status: :ok
+				else
+					render json: {
+						message: "Could not update the shipping status",
+						data: order[:shipping_status],
+					}, status: :not_acceptable
+				end
 			end
 		end
-
 	end
 end
 
