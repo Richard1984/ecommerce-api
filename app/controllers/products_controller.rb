@@ -61,7 +61,7 @@ class ProductsController < ApplicationController
 		# Cambiare file user stories?
 		@product.update(availability: 0, available: false)
 	
-		render json: { message: "Product is now unavailable.", data: @product }, status: :ok
+		render json: { message: "Product successfully deleted.", data: @product }, status: :ok
 	end
 
     def update_images
