@@ -30,7 +30,8 @@ puts "User created"
     {name: "Abbigliamento"},
     {name: "Amnazom fresh"},
     {name: "Film e TV"},
-    {name: "Bellezza"}
+    {name: "Bellezza"},
+    {name: "Amnazom Pempsi"}
 ].each do |attributes|
   Category.find_or_initialize_by(name: attributes[:name]).update!(attributes)
 end
@@ -54,7 +55,12 @@ puts "Category created"
     {name: "Trono di Spade Stagioni 1-8", availability: 2286, price: "53.08", description: "Trono di Spade Stagioni 1-8", category_id: 4, available: true},
     {name: "MAXFIT61 Tastiera meccanica", availability: 13, price: "39.08", description: "MAXFIT61 Tastiera meccanica cablata RGB al 60%, 61 tasti Tastiera da gioco programmabile di tipo C sostituibile a caldo, interruttore blu Outemu, bianco", category_id: 1, available: true},
     {name: "Cooler Master CK352 Tastiera Gaming Meccanica (Layout IT) ", availability: 20, price: "45.52", description: "Cooler Master CK352 Tastiera Gaming Meccanica (Layout IT) - Interruttori Rossi, Retroilluminazione RGB per Tasto e Barre luminose - Formato Completo, Cablato, Keycaps Personalizzabili, QWERTY", category_id: 1, available: true},
-    {name: "Coolerplus FC112 USB Optical Wired Mouse  ", availability: 200, price: "11.99", description: "Coolerplus FC112 USB Optical Wired Mouse con facile clic per ufficio e casa, 1000DPI, Premium e portatile, compatibile con Windows PC, Laptop, Desktop, Notebook(nero)", category_id: 1, available: true}
+    {name: "Coolerplus FC112 USB Optical Wired Mouse  ", availability: 200, price: "11.99", description: "Coolerplus FC112 USB Optical Wired Mouse con facile clic per ufficio e casa, 1000DPI, Premium e portatile, compatibile con Windows PC, Laptop, Desktop, Notebook(nero)", category_id: 1, available: true},
+    {name: "Pempsi™", availability: 200, price: "1.99", description: "La bevenda piu' amata dal tutto il mondo finalmente disponibile su Amnazom", category_id: 6, available: true},
+    {name: "Felpa Nera Pempsi™", availability: 2100, price: "35.00", description: "La Felpa piu' amata dal tutto il mondo finalmente disponibile su Amnazom", category_id: 6, available: true},
+    {name: "Felpa Verde Pempsi™", availability: 2100, price: "35.00", description: "La Felpa piu' amata dal tutto il mondo finalmente disponibile su Amnazom", category_id: 6, available: true},
+    {name: "Felpa Rossa Pempsi™", availability: 2100, price: "35.00", description: "La Felpa piu' amata dal tutto il mondo finalmente disponibile su Amnazom", category_id: 6, available: true},
+    {name: "Hard disk 1T Pempsi™", availability: 20, price: "109.55", description: "L'hard disk' piu' amato dal tutto il mondo finalmente disponibile su Amnazom", category_id: 6, available: true}
 ].each do |attributes|
   Product.find_or_initialize_by(name: attributes[:name]).update!(attributes)
 end

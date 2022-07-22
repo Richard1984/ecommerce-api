@@ -134,6 +134,42 @@ end
 puts "Review created for product 16"
 
 [
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 17, user_id: 5},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id:17, user_id: 2}
+].each do |attributes|
+    Review.find_or_initialize_by(product_id: attributes[:product_id], user_id: attributes[:user_id],).update!(attributes)
+end
+puts "Review created for product 17"
+[
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 18, user_id: 5},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 18, user_id: 2}
+].each do |attributes|
+    Review.find_or_initialize_by(product_id: attributes[:product_id], user_id: attributes[:user_id],).update!(attributes)
+end
+puts "Review created for product 18"
+[
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 19, user_id: 5},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 19, user_id: 2}
+].each do |attributes|
+    Review.find_or_initialize_by(product_id: attributes[:product_id], user_id: attributes[:user_id],).update!(attributes)
+end
+puts "Review created for product 19"
+[
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 20, user_id: 5},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 20, user_id: 2}
+].each do |attributes|
+    Review.find_or_initialize_by(product_id: attributes[:product_id], user_id: attributes[:user_id],).update!(attributes)
+end
+puts "Review created for product 20"
+[
+    {stars: r.rand(1..5), comments: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", product_id: 21, user_id: 5},
+    {stars: r.rand(1..5),comments: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages", product_id: 21, user_id: 2}
+].each do |attributes|
+    Review.find_or_initialize_by(product_id: attributes[:product_id], user_id: attributes[:user_id],).update!(attributes)
+end
+puts "Review created for product 21"
+
+[
   {likes: false, review_id: 1, user_id: 3}
 ].each do |attributes|
     Vote.find_or_initialize_by(review_id: attributes[:review_id], user_id: attributes[:user_id],).update!(attributes)

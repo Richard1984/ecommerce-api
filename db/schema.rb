@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
-  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_attachments", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8mb3", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -33,13 +33,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_variant_records", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "carts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "carts", charset: "utf8mb3", force: :cascade do |t|
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -49,20 +49,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
-  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "categories", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
-  create_table "jwt_deny_list", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "jwt_deny_list", charset: "utf8mb3", force: :cascade do |t|
     t.string "jti", null: false
     t.datetime "exp", null: false
     t.index ["jti"], name: "index_jwt_deny_list_on_jti"
   end
 
-  create_table "lists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "lists", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -70,7 +70,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["user_id"], name: "index_lists_on_user_id"
   end
 
-  create_table "lists_entries", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "lists_entries", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "list_id", null: false
     t.bigint "product_id", null: false
     t.datetime "created_at", null: false
@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["product_id"], name: "index_lists_entries_on_product_id"
   end
 
-  create_table "order_products", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "order_products", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "order_id", null: false
     t.bigint "product_id", null: false
     t.integer "quantity"
@@ -89,7 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["product_id"], name: "index_order_products_on_product_id"
   end
 
-  create_table "orders", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "orders", charset: "utf8mb3", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
@@ -106,7 +106,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
-  create_table "products", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "products", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.integer "availability", default: 0, null: false
     t.decimal "price", precision: 6, scale: 2, default: "0.0", null: false
@@ -119,7 +119,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["name"], name: "index_products_on_name"
   end
 
-  create_table "reviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "reviews", charset: "utf8mb3", force: :cascade do |t|
     t.integer "stars"
     t.text "comments"
     t.bigint "product_id", null: false
@@ -130,7 +130,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
-  create_table "shops", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "shops", charset: "utf8mb3", force: :cascade do |t|
     t.integer "singleton_guard"
     t.string "firstname", default: ""
     t.string "lastname", default: ""
@@ -143,7 +143,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["singleton_guard"], name: "index_shops_on_singleton_guard", unique: true
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", charset: "utf8mb3", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -162,7 +162,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_192052) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "votes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "votes", charset: "utf8mb3", force: :cascade do |t|
     t.boolean "likes", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -23,18 +23,24 @@ class AccountsController < ApplicationController
 		end
 	end
 
-	def destroy
+	def delete_account
 		authorize! :destroy, current_user, :message => "BEWARE: you are not authorized to delete account."
 		# Eliminare l'utente elmina anche tutte le reviews e i voti alle reviews associati ad esso
 		user = current_user
-		sign_out user
-		# Imposta lo user_id degli ordini effettuati a null
-		Order.where(user_id: user.id).update_all(user_id: nil)
-		user.avatar.purge
-		if user.destroy
-			render json: { message: "User deleted.", data: user }, status: :ok
+		#conferma password
+		valid = user.valid_password?(params[:password]) 
+		if valid
+			sign_out user
+			# Imposta lo user_id degli ordini effettuati a null
+			Order.where(user_id: user.id).update_all(user_id: nil)
+			user.avatar.purge
+			if user.destroy
+				render json: { message: "User deleted.", data: user }, status: :ok
+			else
+				render json: { message: "Could not delete user", data: user.errors }, status: :internal_server_error
+			end
 		else
-			render json: { message: "Could not delete user", data: user.errors }, status: :internal_server_error
+			render json: { message: "Password is not correct", data: user.errors }, status: :not_acceptable
 		end
 	end
 
