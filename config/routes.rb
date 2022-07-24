@@ -58,5 +58,4 @@ Rails.application.routes.draw do
     post "success/webhook", to: "payments#success_webhook"
     # post "save_payment_method", to: "payments#save_payment_method"
   end
-  
 end
