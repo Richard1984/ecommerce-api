@@ -55,7 +55,6 @@ When('I click the button "Elimina account"') do
     @session.click_link("Elimina account")
     @session.fill_in "password", :with => data[:password]
     @session.click_button "Elimina"
-    # Aggiungere parte in cui metto password
 end
 
 
