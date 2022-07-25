@@ -33,7 +33,7 @@ ActionController::Base.allow_rescue = false
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
-  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.strategy = :truncation
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
@@ -58,8 +58,6 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
-
-
 Capybara.configure do |config|
   config.default_driver = :selenium
   config.run_server = true
@@ -67,3 +65,8 @@ Capybara.configure do |config|
   config.server_host = "localhost"
   config.server_port = 3000
 end
+
+# require_relative "../../db/seeds"
+# require_relative "../../db/seeds/products_image"
+# require_relative "../../db/seeds/review"
+# require_relative "../../db/seeds/users_image"

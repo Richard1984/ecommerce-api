@@ -4,8 +4,8 @@ Feature: Finalize order
   I want to finalize my order
 
   Background: User Authenticates
-    Given I am not authenticated
-    Given I am a test user
+    Given I already registered
+    Given I am logged in
 
   Scenario: The information inserted is correct
     Given I have items in my cart
