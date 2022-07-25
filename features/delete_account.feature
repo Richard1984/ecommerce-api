@@ -8,7 +8,7 @@ Feature: Delete account
     Given I have a cart, lists, reviews, votes and orders
     Given I am authenticated
 
-  Scenario: I log in with Facebook
+  Scenario: I delete my account
     Given I am in my account page
     When I click the button "Elimina account"
     Then I should be logged out

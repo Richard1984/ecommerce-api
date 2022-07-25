@@ -29,3 +29,6 @@ Run the following command to test the webhooks and copy the signature to the str
 ```bash
     stripe listen --forward-to http://localhost:3000/payment/success/webhook
 ```
+
+
+per i test: o si fa "rake cucumber" avendo startato la webapp, o si starta il rails test server con "RAILS_ENV=test rails s" e si starta la webapp
