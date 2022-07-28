@@ -59,9 +59,9 @@ end
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
 Capybara.configure do |config|
-  config.default_driver = :selenium
+  # config.default_driver = :selenium
   config.run_server = true
-  config.app_host   = "http://localhost:3001"
+  config.app_host   = "http://localhost:3000"
   config.server_host = "localhost"
   config.server_port = 3000
 end

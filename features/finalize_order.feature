@@ -4,11 +4,12 @@ Feature: Finalize order
   I want to finalize my order
 
   Background: User Authenticates
-    Given I already registered
-    Given I am logged in
+    Given test user is created
+    Given I am authenticated as test user
 
   Scenario: The information inserted is correct
+    Given test product is created
     Given I have items in my cart
-    And I have inserted my informations for the checkout
-    When I click the button "Paga"
-    Then I should be able to see the order details
+    Given I started a checkout session
+    When I confirm a payment
+    Then Stripe Webhook confirms payment
