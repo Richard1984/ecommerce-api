@@ -7,7 +7,7 @@ Feature: Finalize order
     Given test user is created
     Given I am authenticated as test user
 
-  Scenario: The information inserted is correct
+  Scenario: Stripe payment and webhook integration
     Given test product is created
     Given I have items in my cart
     Given I started a checkout session

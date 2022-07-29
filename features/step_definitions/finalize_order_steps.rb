@@ -81,14 +81,35 @@ end
 Then("Stripe Webhook confirms payment") do
     # Create a payment intent succeeded webhook event
     event = StripeMock.mock_webhook_event("payment_intent.succeeded", {
-        id: payment_intent_id
+        id: payment_intent_id,
+        metadata: {
+            user_id: user_id,
+            order_id: order_id
+        },
+        charges: {
+            data: [
+                {
+                    receipt_url: "http://localhost:3000/totally_not_a_real_receipt_url",
+                    shipping: {
+                        name: "Test Tester",
+                        address: {
+                            line1: "Viale Test",
+                            line2: "123",
+                            postal_code: "12345",
+                            city: "Città di Test",
+                            country: "Italia"
+                        }
+                    }
+                }
+            ]
+        }
     })
     
     # Sign the event with Stripe and get header
     timestamp = Time.now
     signature = Stripe::Webhook::Signature.compute_signature(
         timestamp,
-        event.inspect,
+        event.to_json,
         Rails.application.credentials.stripe_webhook_secret
     )
     header = Stripe::Webhook::Signature.generate_header(
@@ -96,22 +117,17 @@ Then("Stripe Webhook confirms payment") do
         signature
     )
     
-    # puts signature
-    # puts header
-    # puts event.inspect
-    # event = Stripe::Webhook.construct_event(payload, header, Rails.application.credentials.stripe_webhook_secret)
-        
     # Set stripe signature header
     page.driver.header "Stripe-Signature", header
-    # Send event as body (or parameter (?)) of request to webhook endpoint
-    page.driver.post("/payment/success/webhook", {
-        event: event.to_json #! This should be the raw data, not the JSON object and maybe it should not be in the body but in the params
-    })
-  
-    # customer_object = event.data.object
-    # expect(customer_object.id).to_not be_nil
+    page.driver.header "Content-Type", "application/json"
+    # Send json event as body of request
+    page.driver.post("/payment/success/webhook", event.to_json)
 
-    @order = Order.find(order_id, payment_status: :paid)
+    # Check that the response is a 200 OK
+    expect(page.status_code).to eq(200)
+
+    # Check that the order is marked as paid
+    @order = Order.find_by(id: order_id, payment_status: :paid)
     expect @order != nil
 
     StripeMock.stop()
