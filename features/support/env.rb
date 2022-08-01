@@ -64,6 +64,7 @@ Capybara.configure do |config|
   config.app_host   = "http://localhost:3000"
   config.server_host = "localhost"
   config.server_port = 3000
+  config.threadsafe = true
 end
 
 # require_relative "../../db/seeds"

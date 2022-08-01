@@ -63,7 +63,7 @@ group :development, :test do
   gem "database_cleaner"
   gem "capybara"
   gem "rspec-rails"
-  # gem "selenium-webdriver"
+  gem "selenium-webdriver"
   gem "stripe-ruby-mock", "~> 3.1.0.rc3", :require => "stripe_mock"
 end
 

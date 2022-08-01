@@ -14,25 +14,30 @@ Given ("There are non keyboard products in the shop") do
 end
 
 Given ("I am in the home page") do
-    visit "/"
+    @session = Capybara::Session.new(:selenium, Rails.application) do |config|
+        config.app_host   = "http://localhost:3001"
+    end
+
+    @session.visit "/"
 end
 
 When('I write "keyboard" in the seach bar') do
-    fill_in "Cerca prodotti", :with => "keyboard"
+    @session.fill_in "Cerca prodotti", :with => "keyboard"
 end
 
 When("I click on the looking glass icon") do
-    click_button("", class: "button_button__zpxkc search-bar_button__58D-N button_button--medium__20rZ6")
+    @session.click_button("", class: "button_button__zpxkc search-bar_button__58D-N button_button--medium__20rZ6")
 end
 
 Then('I should be able to see all products with "keyboard" in the name') do
     keyboards.each do |name|
-        expect(page).to have_content(name)
+        expect(@session).to have_content(name)
     end
 end
 
 Then('There should be no products without "keyboard" in the name') do
     non_keyboards.each do |name|
-        expect(page).to have_no_content(name)
+        expect(@session).to have_no_content(name)
     end
+    @session.quit
 end

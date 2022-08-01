@@ -10,7 +10,9 @@ Given ("I am a test user1") do
 end
 
 Given ("I am authenticated") do
-    @session = Capybara::Session.new(:selenium)
+    @session = Capybara::Session.new(:selenium, Rails.application) do |config|
+        config.app_host   = "http://localhost:3001"
+    end
 
     @session.visit('/login')
     @session.fill_in "email", :with => data[:email]
@@ -23,8 +25,8 @@ Given ("I have a cart, lists, reviews, votes and orders") do
 
     Cart.create!(user_id: @test_user.id, product_id: test_product.id, quantity: 1)
 
-    test_product = List.create!(user_id: @test_user.id, name: "Test List")
-    ListsEntry.create!(list_id: test_product.id, product_id: test_product.id)
+    test_list = List.create!(user_id: @test_user.id, name: "Test List")
+    ListsEntry.create!(list_id: test_list.id, product_id: test_product.id)
 
     Review.create!(stars: 4, comments: "Test review", user_id: @test_user.id, product_id: test_product.id)
 
@@ -38,7 +40,6 @@ Given ("I have a cart, lists, reviews, votes and orders") do
     order = Order.create!(user_id: @test_user.id, payment_status: :paid_not, shipping_status: :shipped_not)
     OrderProduct.create!(order_id: order.id, product_id: test_product.id, quantity: 1)
 
-    # Non so se necessario
     expect(Product.where(name: "Test Product").count).to eq(1)
     expect(Cart.where(user_id: @test_user.id, product_id: test_product.id, quantity: 1).count).to eq(1)
     expect(ListsEntry.where(list_id: test_product.id, product_id: test_product.id).count).to eq(1)
@@ -51,7 +52,6 @@ Given('I am in my account page') do
 end
 
 When('I click the button "Elimina account"') do
-    # Non me lo vede come bottone quindi non me lo fa cliccare
     @session.click_link("Elimina account")
     @session.fill_in "password", :with => data[:password]
     @session.click_button "Elimina"
@@ -61,6 +61,7 @@ end
 
 Then('I should be logged out') do
     expect(@session.current_path()).to eq("/login")
+    @session.quit
 end
 
 Then('my account should be deleted') do
