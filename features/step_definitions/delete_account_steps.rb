@@ -42,7 +42,7 @@ Given ("I have a cart, lists, reviews, votes and orders") do
 
     expect(Product.where(name: "Test Product").count).to eq(1)
     expect(Cart.where(user_id: @test_user.id, product_id: test_product.id, quantity: 1).count).to eq(1)
-    expect(ListsEntry.where(list_id: test_product.id, product_id: test_product.id).count).to eq(1)
+    expect(ListsEntry.where(list_id: test_list.id, product_id: test_product.id).count).to eq(1)
     expect(Review.where(product_id: test_product.id).count).to eq(2)
     expect(Vote.where(user_id: @test_user.id).count).to eq(1)
 end

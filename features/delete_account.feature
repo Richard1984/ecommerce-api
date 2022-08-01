@@ -5,8 +5,8 @@ Feature: Delete account
 
   Background: User
     Given I am a test user1
-    Given I have a cart, lists, reviews, votes and orders
     Given I am authenticated
+    Given I have a cart, lists, reviews, votes and orders
 
   Scenario: I delete my account
     Given I am in my account page
