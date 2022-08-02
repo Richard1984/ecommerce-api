@@ -62,17 +62,6 @@ class PaymentsController < ApplicationController
             }
         }, status: :ok
     end
-    
-
-    def save_payment_method
-        if params[:save_payment_method] == "false"
-            # Change PaymentIntent to not save payment method
-            # params[:payment_intent_id]
-        else
-            # Change PaymentIntent to save payment method
-            # params[:payment_intent_id]
-        end
-    end
 
     def success_client
         # Update payment state
@@ -82,8 +71,8 @@ class PaymentsController < ApplicationController
             if order
                 # Change the payment state
                 order.update_columns(payment_status: :paid_client)
-                # Save it
                 order.save!
+                render json: { message: "Done" }, status: :ok
             else
                 order = Order.where(user_id: current_user.id, id: params[:order_id]).first
                 if order
@@ -93,7 +82,6 @@ class PaymentsController < ApplicationController
                     render json: { message: "Order not found" }, status: :not_acceptable
                 end
             end
-            render json: { message: "Order not found" }, status: :ok
         end
         # Empty the cart
         Cart.where(user_id: current_user.id).destroy_all

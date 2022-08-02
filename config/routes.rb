@@ -56,6 +56,5 @@ Rails.application.routes.draw do
   resource :payment, only: [:show, :update] do
     post "success/client", to: "payments#success_client"
     post "success/webhook", to: "payments#success_webhook"
-    # post "save_payment_method", to: "payments#save_payment_method"
   end
 end
