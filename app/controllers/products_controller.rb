@@ -113,7 +113,11 @@ class ProductsController < ApplicationController
         search_name = params[:search_name]
         if params[:sort_criteria]
             sorting_criteria = params[:sort_criteria]
-            sorting_order = params[:sort_order] ? params[:sort_order] : :asc # asc / desc
+            sorting_order = params[:sort_order] ? params[:sort_order] : "asc" # asc / desc
+
+			# Fix dangerous query method
+			sorting_criteria = Arel.sql(sorting_criteria)
+			sorting_order = Arel.sql(sorting_order)
         else
             sorting_criteria = nil
             sorting_order = nil
@@ -130,7 +134,7 @@ class ProductsController < ApplicationController
 			else
 				@products = @products.sort { |p1,p2| p2.total_ordered <=> p1.total_ordered }
 			end
-		else
+		elsif sorting_criteria
 			@products = @products.order(sorting_criteria => sorting_order) 
 		end
 		prods = Array.new

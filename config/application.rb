@@ -21,6 +21,7 @@ module EcommerceApi
     config.hosts << "api"
     config.hosts << "www.amnazom.davegabe.it"
     config.hosts << "amnazom.davegabe.it"
+    config.hosts << "localhost"
 
     # Configuration for the application, engines, and railties goes here.
     #

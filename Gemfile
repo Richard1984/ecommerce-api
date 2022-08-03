@@ -16,7 +16,7 @@ gem "koala"
 gem "rails", "~> 7.0.3"
 
 # Use mysql as the database for Active Record
-gem 'mysql2'
+gem "mysql2"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
@@ -45,19 +45,26 @@ gem "bootsnap", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem "rack-cors"
 
-gem 'devise-jwt'
+gem "devise-jwt"
 
-# Autorizzazione
-gem 'canard', '~> 0.6.2.pre'
+# Authorization
+gem "canard", "~> 0.6.2.pre"
 
-gem 'dry-configurable', '0.13.0'
+gem "dry-configurable", "0.13.0"
 
 # Use stripe
-gem "stripe"
+gem "stripe", "~> 5.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+
+  gem "cucumber-rails", require: false
+  gem "database_cleaner"
+  gem "capybara"
+  gem "rspec-rails"
+  gem "selenium-webdriver"
+  gem "stripe-ruby-mock", "~> 3.1.0.rc3", :require => "stripe_mock"
 end
 
 group :development do
