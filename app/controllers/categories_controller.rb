@@ -16,7 +16,6 @@ class CategoriesController < ApplicationController
 		end
 	end
 
-	# NON E' tra le user stories
 	def update
 		authorize! :update, Category, :message => "BEWARE: you are not authorized to update categories."
 
@@ -28,7 +27,6 @@ class CategoriesController < ApplicationController
 		end
 	end
 
-	# NON E' tra le user stories
 	def destroy
 		authorize! :destroy, Category, :message => "BEWARE: you are not authorized to delete categories."
 

@@ -11,7 +11,6 @@ class AccountsController < ApplicationController
 
 	def update
 		authorize! :update, current_user, :message => "BEWARE: you are not authorized to modify account information."
-		# si dovrebbe richiedere la password
 
 		if current_user.update(params.require(:user).permit(:email, :firstname, :lastname, :country))
 			current_user_json = JSON.parse(current_user.to_json)
@@ -55,7 +54,6 @@ class AccountsController < ApplicationController
 
 	def update_avatar
 		authorize! :update, current_user, :message => "BEWARE: you are not authorized to modify this."
-		# Mettere qualche check per la dimensione, errori?
 		current_user.avatar.attach(params[:avatar])
 		render json: { message: "Avatar updated" }
 	end

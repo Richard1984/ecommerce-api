@@ -2,7 +2,7 @@ class CartsController < ApplicationController
     def show
         authorize! :read, Cart, :message => "BEWARE: you do not have a cart, since you are not logged in."
         if current_user.has_role? :admin 
-            # Se utente e' admin mostra il carrello di tutti gli utenti, tenere?
+            # Se utente e' admin mostra il carrello di tutti gli utenti
             carts = Cart.group(:user_id)
             users_cart = Array.new
             carts.each{ |c|

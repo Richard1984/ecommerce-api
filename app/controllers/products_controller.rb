@@ -57,8 +57,6 @@ class ProductsController < ApplicationController
 		#@product.images.purge
 		#@product.destroy
 
-		# Forse cambiare la colonna availability in stock per evitare confusioni
-		# Cambiare file user stories?
 		@product.update(availability: 0, available: false)
 	
 		render json: { message: "Product successfully deleted.", data: @product }, status: :ok
@@ -66,7 +64,6 @@ class ProductsController < ApplicationController
 
     def update_images
 		authorize! :update, @product, :message => "BEWARE: you are not authorized to update products."
-		# errori?
 		product = Product.find(params[:product_id])
 		product.images.attach(params[:images])
 		render json: { message: "Images uploaded", images: product.images.attached? }
@@ -108,7 +105,6 @@ class ProductsController < ApplicationController
 
     def search_and_order
 
-        # Forse si puo' fare piu' pulito
         category_id = params[:category_id]
         search_name = params[:search_name]
         if params[:sort_criteria]
@@ -128,7 +124,6 @@ class ProductsController < ApplicationController
         @products = @products.where("name like ?", "%#{search_name}%") if search_name # Select containing name
 		# Sort
         if sorting_criteria == "total_ordered"
-			# fare meglio?
 			if sorting_order == "asc"
 				@products = @products.sort { |p1,p2| p1.total_ordered <=> p2.total_ordered }
 			else
